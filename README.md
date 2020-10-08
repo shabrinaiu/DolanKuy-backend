@@ -9,7 +9,7 @@ Eka Darma W<br>
 
 # Database Information
 Database yang kami pakai untuk aplikasi MVP adalah PHPMySQL dengan 6 Table yaitu :
-1. Table User (Account user, , Privilege : user&admin)
+1. Table User (Account user, Privilege : user)
 2. Table Kuliner (List tempat kuliner dengan detailnya, Privilege : admin)
 3. Table SPBU_ATM (List tempat SPBU dan ATM dengan detailnya, Privilege : admin)
 4. Table Market (List tempat market dengan detailnya, Privilege : admin)
