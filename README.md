@@ -5,4 +5,4 @@ I Gede Kresna PA<br>
 Belinda Anindya KW<br>
 Gilang Taufiq A<br>
 Zul Fauzi O<br>
-Eka Dharma W<br>
+Eka Darma W<br>
