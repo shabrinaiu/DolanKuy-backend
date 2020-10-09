@@ -7,6 +7,9 @@ Gilang Taufiq A<br>
 Zul Fauzi O<br>
 Eka Darma W<br>
 
+# Project Information
+DolanKuy adalah sebuah platform Website, Desktop dan mobile yang memuat katalog wisata di daerah
+
 # Database Information
 Database yang kami pakai untuk aplikasi MVP adalah PHPMySQL dengan 6 Table yaitu :
 1. Table User (Account user, Privilege : user(create), admin(delete))
