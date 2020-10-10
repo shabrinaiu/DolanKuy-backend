@@ -1,11 +1,11 @@
 # WPPL_DolanKuy_Backend
-The Team :
-Ulima Inas Shabrina<br>
-I Gede Kresna PA<br>
-Belinda Anindya KW<br>
-Gilang Taufiq A<br>
-Zul Fauzi O<br>
-Eka Darma W<br>
+The Team :<br>
+- Ulima Inas Shabrina<br>
+- I Gede Kresna PA<br>
+- Belinda Anindya KW<br>
+- Gilang Taufiq A<br>
+- Zul Fauzi O<br>
+- Eka Darma W<br>
 
 # Project Information
 DolanKuy adalah sebuah platform Website, Desktop dan mobile yang memuat katalog wisata di daerah
