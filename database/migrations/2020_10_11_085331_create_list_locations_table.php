@@ -14,15 +14,15 @@ class CreateListLocationsTable extends Migration
     public function up()
     {
         Schema::create('list_locations', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->increments('id');
             $table->string('name');
             $table->string('address');
-            $table->string('description');
-            $table->blob('image');
-            $table->string('contact');
+            $table->text('description');
+            $table->string('image');
+            $table->text('contact');
             $table->double('latitude');
             $table->double('longitude');
+            $table->timestamps();
         });
     }
 
