@@ -8,7 +8,7 @@ The Team :<br>
 - Eka Darma W<br>
 
 # How to be contributor
-- Clone this repository
+- Clone this repository using VSCode :D
 - $composer install
 - Go to your own branch
 - Push to your own branch
