@@ -7,6 +7,13 @@ The Team :<br>
 - Zul Fauzi O<br>
 - Eka Darma W<br>
 
+# How to be contributor
+- Clone this repository
+- $composer install
+- Go to your own branch
+- Push to your own branch
+- Make a pull Request
+
 # Project Information
 DolanKuy adalah sebuah platform Website, Desktop dan mobile yang memuat katalog wisata di daerah
 
