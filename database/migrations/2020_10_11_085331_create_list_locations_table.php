@@ -15,13 +15,14 @@ class CreateListLocationsTable extends Migration
     {
         Schema::create('list_locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('address');
+            $table->string('name', 255);
+            $table->text('address');
             $table->text('description');
-            $table->string('image');
+            $table->string('image', 255);
+            $table->string('tag', 255);
             $table->text('contact');
             $table->double('latitude');
-            $table->double('longitude');
+            $table->double('longtitude');
             $table->timestamps();
         });
     }
