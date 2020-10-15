@@ -13,7 +13,7 @@ Get Started
 - $composer install
 - rename .env.example files to .env
 - $php artisan serve
-- <<error message generate app key>> Click "Generate Key"
+- (error message generate app key) Click "Generate Key"
 - Refresh
 
 Connect with this Repository
