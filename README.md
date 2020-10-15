@@ -8,16 +8,22 @@ The Team :<br>
 - Eka Darma W<br>
 
 # How to be contributor
-Connect with this Repository
+Get Started
 - Clone this repository using VSCode :D
 - $composer install
+- rename .env.example files to .env
+- $php artisan serve
+- <<error message generate app key>> Click "Generate Key"
+- Refresh
+
+Connect with this Repository
 - Go to your own branch
 - Push to your own branch
 - Make a pull Request
 
 Connect with Database
 - Make new DB in phpmyadmin
-- config your db name in .env
+- config your db name in .env files
 - $php artisan migrate
 
 # Project Information
