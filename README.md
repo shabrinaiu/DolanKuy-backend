@@ -8,11 +8,17 @@ The Team :<br>
 - Eka Darma W<br>
 
 # How to be contributor
+Connect with this Repository
 - Clone this repository using VSCode :D
 - $composer install
 - Go to your own branch
 - Push to your own branch
 - Make a pull Request
+
+Connect with Database
+- Make new DB in phpmyadmin
+- config your db name in .env
+- $php artisan migrate
 
 # Project Information
 DolanKuy adalah sebuah platform Website, Desktop dan mobile yang memuat katalog wisata di daerah
