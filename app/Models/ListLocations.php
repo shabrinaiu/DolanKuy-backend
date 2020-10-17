@@ -9,29 +9,26 @@ class ListLocations extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $table = "list_locations";
+    public $timestamps = true;
+    
     protected $fillable = [
-        'rating',
-        'review',
+        'name',
+        'address',
+        'description',
+        'image',
+        'tag',
+        'contact',
+        'latitude',
+        'longitude',
+        'created_at',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+
     protected $hidden = [
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    
     protected $casts = [
     ];
 }
