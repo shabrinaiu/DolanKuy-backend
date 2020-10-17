@@ -5,28 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CategoryLocation extends Model
+class ListLocations extends Model
 {
     use HasFactory;
 
-    
-    protected $table = 'rating_reviews';
+    protected $table = 'list_locations';
     public $timestamps = true;
 
     protected $fillable = [
-<<<<<<< Updated upstream:app/Models/CategoryLocation.php
         'name',
         'address',
         'description',
         'image',
+        'tag',
         'contact',
         'latitude',
         'longitude',
-=======
-        'rating',
-        'review',
         'created_at',
->>>>>>> Stashed changes:app/Models/RatingReviews.php
     ];
 
     
@@ -35,6 +30,8 @@ class CategoryLocation extends Model
 
     
     protected $casts = [
-        
+        'latitude' => 'double',
+        'longitude' => 'double',
     ];
+
 }
