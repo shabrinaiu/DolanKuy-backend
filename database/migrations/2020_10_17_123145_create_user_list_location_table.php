@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RelasitambahanRatingReviewTable extends Migration
+class CreateUserListLocationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class RelasitambahanRatingReviewTable extends Migration
      */
     public function up()
     {
-        Schema::table('rating_reviews', function (Blueprint $table) {
-            // $table->integer('list_location_id')->unsigned()->change();
-            // $table->foreign('list_location_id')->references('id')->on('list_locations')
-            //     ->onUpdate('cascade')->onDelete('cascade');
+        Schema::create('user_list_locations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('user');
             $table->foreignId('list_locations_id')->constrained('list_locations');
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class RelasitambahanRatingReviewTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('user_list_locations');
     }
 }

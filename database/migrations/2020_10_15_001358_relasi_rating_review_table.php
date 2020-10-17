@@ -14,9 +14,10 @@ class RelasiRatingReviewTable extends Migration
     public function up()
     {
         Schema::table('rating_reviews', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned()->change();
-            $table->foreign('user_id')->references('id')->on('users')
-                ->onUpdate('cascade')->onDelete('cascade');
+            // $table->integer('user_id')->unsigned()->change();
+            // $table->foreign('user_id')->references('id')->on('user')
+            //     ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('user');
         });
     }
 

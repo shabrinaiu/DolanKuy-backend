@@ -45,4 +45,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function listLocations()
+    {
+    	return $this->belongsToMany('App\Models\ListLocations', 'user_list_locations');
+    }
 }

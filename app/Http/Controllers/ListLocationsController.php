@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\tag_table;
 use Illuminate\Http\Request;
+use App\Models\ListLocations;
 
-class TagTableController extends Controller
+class ListLocationsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,17 +14,8 @@ class TagTableController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $location = ListLocations::all();
+        return response()->json($location);
     }
 
     /**
@@ -35,39 +26,30 @@ class TagTableController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $location = ListLocations::create($request->all());
+        return response()->json($location, 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\tag_table  $tag_table
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(tag_table $tag_table)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\tag_table  $tag_table
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(tag_table $tag_table)
-    {
-        //
+        $location = ListLocations::find($id);
+        return response()->json($location);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\tag_table  $tag_table
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, tag_table $tag_table)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,11 +57,12 @@ class TagTableController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\tag_table  $tag_table
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(tag_table $tag_table)
+    public function destroy($id)
     {
-        //
+        $location = ListLocations::find($id);
+        $location->delete();
     }
 }

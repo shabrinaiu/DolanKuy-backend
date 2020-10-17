@@ -9,14 +9,22 @@ class ListLocations extends Model
 {
     use HasFactory;
 
+    protected $table = "list_locations";
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'rating',
-        'review',
+        'category_id',
+        'name',
+        'address',
+        'description',
+        'image',
+        'contact',
+        'latitude',
+        'longitude'
     ];
 
     /**
@@ -34,4 +42,9 @@ class ListLocations extends Model
      */
     protected $casts = [
     ];
+
+    public function users()
+    {
+    	return $this->belongsToMany('App\Models\User', 'user_list_locations');
+    }
 }
