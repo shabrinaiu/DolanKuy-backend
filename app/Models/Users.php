@@ -18,6 +18,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+<<<<<<< HEAD:app/Models/Users.php
 <<<<<<< Updated upstream:app/Models/User.php
     ];
 
@@ -34,6 +35,14 @@ class User extends Authenticatable
     ];
 
 >>>>>>> Stashed changes:app/Models/Users.php
+=======
+        'image',
+        'latitude',
+        'longitude',
+        'created_at',
+    ];
+
+>>>>>>> 23a91847dfb9171e60e2be688a004f415d57b56d:app/Models/User.php
     protected $hidden = [
         'password',
         'remember_token',
@@ -42,4 +51,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function listLocations()
+    {
+    	return $this->belongsToMany('App\Models\ListLocations', 'user_list_locations');
+    }
 }
