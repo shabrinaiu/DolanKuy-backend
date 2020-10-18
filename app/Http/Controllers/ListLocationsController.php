@@ -51,7 +51,25 @@ class ListLocationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required',
+            'address' => 'required',
+            'description' => 'required',
+            'tag' => 'required',
+            'contact' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required'
+        ]);
+
+        $list_location = ListLocation::find($id);
+        $list_location->name = $request->name;
+        $list_location->address = $request->address;
+        $list_location->description = $request->description;
+        $list_location->tag = $request->tag;
+        $list_location->contact = $request->contact;
+        $list_location->latitude = $request->latitude;
+        $list_location->longitude = $request->longitude;
+        $list_location->save();
     }
 
     /**
