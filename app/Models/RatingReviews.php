@@ -5,23 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CategoryLocation extends Model
+class RatingReviews extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $table = "rating_reviews";
+    public $timestamps = true;
+
     protected $fillable = [
-        'name',
-        'address',
-        'description',
-        'image',
-        'contact',
-        'latitude',
-        'longitude',
+        'created_at',
+        'rating',
+        'review',
     ];
 
     /**

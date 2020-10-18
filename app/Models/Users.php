@@ -11,33 +11,30 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $table = "users";
+    public $timestamps = true;
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'image',
+        'latitude',
+        'longitude',
+        'created_at',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function listLocations()
+    {
+    	return $this->belongsToMany('App\Models\ListLocations', 'user_list_locations');
+    }
 }

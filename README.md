@@ -7,6 +7,25 @@ The Team :<br>
 - Zul Fauzi O<br>
 - Eka Darma W<br>
 
+# How to be contributor
+Get Started
+- Clone this repository using VSCode :D
+- $composer install
+- rename .env.example files to .env
+- $php artisan serve
+- (error message generate app key) Click "Generate Key"
+- Refresh
+
+Connect with this Repository
+- Go to your own branch
+- Push to your own branch
+- Make a pull Request
+
+Connect with Database
+- Make new DB in phpmyadmin
+- config your db name in .env files
+- $php artisan migrate
+
 # Project Information
 DolanKuy adalah sebuah platform Website, Desktop dan mobile yang memuat katalog wisata di daerah
 
