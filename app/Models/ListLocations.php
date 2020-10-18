@@ -11,7 +11,7 @@ class ListLocations extends Model
 
     protected $table = "list_locations";
     public $timestamps = true;
-    
+
     protected $fillable = [
         'name',
         'address',
@@ -24,11 +24,10 @@ class ListLocations extends Model
         'created_at',
     ];
 
-
     protected $hidden = [
     ];
 
-    
+
     protected $casts = [
     ];
 
