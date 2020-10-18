@@ -33,6 +33,6 @@ class ListLocations extends Model
 
     public function users()
     {
-    	return $this->belongsToMany('App\Models\User', 'user_list_locations');
+    	return $this->belongsToMany('App\Models\Users', 'user_list_locations');
     }
 }
