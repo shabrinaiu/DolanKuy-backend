@@ -16,21 +16,14 @@ class RatingReviews extends Model
         'created_at',
         'rating',
         'review',
+        
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+   
     protected $hidden = [
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+   
     protected $casts = [
         'latitude' => 'double',
         'longitude' => 'double',
