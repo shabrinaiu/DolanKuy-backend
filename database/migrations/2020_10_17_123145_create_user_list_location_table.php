@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryLocationsTable extends Migration
+class CreateUserListLocationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateCategoryLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_locations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 255);
+        Schema::create('user_list_locations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('user');
+            $table->foreignId('list_locations_id')->constrained('list_locations');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateCategoryLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_locations');
+        Schema::dropIfExists('user_list_locations');
     }
 }
