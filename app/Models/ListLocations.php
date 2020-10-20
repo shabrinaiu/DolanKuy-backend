@@ -10,9 +10,7 @@ class ListLocations extends Model
     use HasFactory;
 
 
-   
-
-    protected $table = "list_locations";
+    protected $table = 'list_locations';
 
     public $timestamps = true;
 
@@ -29,13 +27,10 @@ class ListLocations extends Model
     ];
 
 
-    
-    
     protected $casts = [
         'latitude' => 'double',
         'longitude' => 'double',
     ];
-
 
     protected $hidden = [
     ];
