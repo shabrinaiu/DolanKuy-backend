@@ -53,7 +53,14 @@ class CategoryLocationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required'
+         ]);
+      
+         $category = CategoryLocations::find($id);
+         $category->name = $request->name;
+         $category->save();
+         return response()->json($category);
     }
 
     /**
@@ -66,5 +73,6 @@ class CategoryLocationsController extends Controller
     {
         $category = CategoryLocations::find($id);
         $category->delete();
+        return response()->json($category);
     }
 }

@@ -14,8 +14,8 @@ class ListLocationsController extends Controller
      */
     public function index()
     {
-        $location = ListLocations::all();
-        return response()->json($location);
+        $list_location = ListLocations::all();
+        return response()->json($list_location);
     }
 
     /**
@@ -26,8 +26,26 @@ class ListLocationsController extends Controller
      */
     public function store(Request $request)
     {
-        $location = ListLocations::create($request->all());
-        return response()->json($location, 201);
+        $this->validate($request,[
+            'name' => 'required',
+            'address' => 'required',
+            'description' => 'required',
+            'tag' => 'required',
+            'contact' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required'
+        ]);
+
+        $list_location = ListLocations::create([
+        'name' => $request->name,
+        'address' => $request->address,
+        'description' => $request->description,
+        'tag' => $request->tag,
+        'contact' => $request->contact,
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        ]);
+        return response()->json($list_location);
     }
 
     /**
@@ -38,8 +56,8 @@ class ListLocationsController extends Controller
      */
     public function show($id)
     {
-        $location = ListLocations::find($id);
-        return response()->json($location);
+        $list_location = ListLocations::find($id);
+        return response()->json($list_location);
     }
 
     /**
@@ -70,6 +88,8 @@ class ListLocationsController extends Controller
         $list_location->latitude = $request->latitude;
         $list_location->longitude = $request->longitude;
         $list_location->save();
+        return response()->json($list_location);
+
     }
 
     /**
@@ -80,7 +100,8 @@ class ListLocationsController extends Controller
      */
     public function destroy($id)
     {
-        $location = ListLocations::find($id);
-        $location->delete();
+        $list_location = ListLocations::find($id);
+        $list_location->delete();
+        return response()->json($list_location);
     }
 }
