@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryLocations extends Model
 {
     use HasFactory;
-
     protected $table = 'category_locations';
     public $timestamps = true;
     
@@ -16,11 +15,8 @@ class CategoryLocations extends Model
         'name',
         'created_at',
     ];
-
-    
     protected $hidden = [
     ];
-
     protected $casts = [
     ];
 }
