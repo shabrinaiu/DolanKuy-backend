@@ -18,31 +18,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-<<<<<<< HEAD:app/Models/Users.php
-<<<<<<< Updated upstream:app/Models/User.php
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-=======
         'image',
         'latitude',
         'longitude',
         'created_at',
     ];
 
->>>>>>> Stashed changes:app/Models/Users.php
-=======
-        'image',
-        'latitude',
-        'longitude',
-        'created_at',
-    ];
-
->>>>>>> 23a91847dfb9171e60e2be688a004f415d57b56d:app/Models/User.php
     protected $hidden = [
         'password',
         'remember_token',
