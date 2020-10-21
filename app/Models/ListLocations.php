@@ -18,18 +18,19 @@ class ListLocations extends Model
         'name',
         'address',
         'description',
+        'category_id',
         'image',
         'tag',
         'contact',
         'latitude',
-        'longitude',
+        'longtitude',
         'created_at',
     ];
 
 
     protected $casts = [
         'latitude' => 'double',
-        'longitude' => 'double',
+        'longtitude' => 'double',
     ];
 
     protected $hidden = [
