@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ListLocationsController;
+use App\Http\Controllers\CategoryLocationsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,16 +16,45 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$api = app('Dingo\Api\Routing\Router');
 
-$api->version('v1', function($api) {
-    $api->group(['namespace' => 'App\Http\Controllers'], function() use($api) {
-
-        $api->get('location', 'ListLocationsController@index');
-        $api->get('location/{id}', 'ListLocationsController@show');
-        $api->post('location', 'ListLocationsController@store');
-        $api->put('location/{id}/update', 'ListLocationsController@update');
-        $api->delete('location/{id}/delete', 'ListLocationsController@delete');
-
-    });
+Route::prefix('locations')->group(function () {
+    Route::get('/', [ListLocationsController::class, 'index']);
+    Route::get('/{id}', [ListLocationsController::class, 'show']);
+    Route::post('/', [ListLocationsController::class, 'store']);
+    Route::put('/update/{id}', [ListLocationsController::class, 'update']);
+    Route::delete('/delete', [ListLocationsController::class, 'delete']);
 });
+
+Route::prefix('category')->group(function () {
+    Route::get('/', [CategoryLocationsController::class, 'index']);
+    Route::get('/{id}', [CategoryLocationsController::class, 'show']);
+    Route::post('/', [CategoryLocationsController::class, 'store']);
+    Route::put('/update/{id}', [CategoryLocationsController::class, 'update']);
+    Route::delete('/delete', [CategoryLocationsController::class, 'delete']);
+});
+
+
+// $api = app('Dingo\Api\Routing\Router');
+
+// $api->version('v1', function($api) {
+//     $api->group(['namespace' => 'App\Http\Controllers'], function() use($api) {
+
+//         $api->get('/', 'ListLocationsController@index');
+//         $api->get('/{id}', 'ListLocationsController@show');
+//         $api->post('/', 'ListLocationsController@store');
+//         $api->put('/update/{id}', 'ListLocationsController@update');
+//         $api->delete('location/delete/', 'ListLocationsController@delete');
+
+//     });
+
+//     $api->group(['namespace' => 'App\Http\Controllers'], function() use($api) {
+
+//         $api->get('category', 'CategoryLocationsController@index');
+//         $api->get('category/{id}', 'CategoryLocationsController@show');
+//         $api->post('category', 'CategoryLocationsController@store');
+//         $api->put('category/{id}/update', 'CategoryLocationsController@update');
+//         $api->delete('category/{id}/delete', 'CategoryLocationsController@delete');
+
+//     });
+
+// });

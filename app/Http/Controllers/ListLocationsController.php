@@ -31,19 +31,23 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             'tag' => 'required',
+            'image' => 'required',
             'contact' => 'required',
+            'category_id' => 'required',
             'latitude' => 'required',
-            'longitude' => 'required'
+            'longtitude' => 'required'
         ]);
 
         $list_location = ListLocations::create([
-        'name' => $request->name,
-        'address' => $request->address,
-        'description' => $request->description,
-        'tag' => $request->tag,
-        'contact' => $request->contact,
-        'latitude' => $request->latitude,
-        'longitude' => $request->longitude,
+            'name' => $request->name,
+            'address' => $request->address,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'image' => $request->image,
+            'tag' => $request->tag,
+            'contact' => $request->contact,
+            'latitude' => $request->latitude,
+            'longtitude' => $request->longtitude,
         ]);
         return response()->json($list_location);
     }
@@ -74,19 +78,23 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             'tag' => 'required',
+            'image' => 'required',
             'contact' => 'required',
+            'category_id' => 'required',
             'latitude' => 'required',
-            'longitude' => 'required'
+            'longtitude' => 'required'
         ]);
 
-        $list_location = ListLocation::find($id);
+        $list_location = ListLocations::find($id);
         $list_location->name = $request->name;
         $list_location->address = $request->address;
+        $list_location->image = $request->image;
+        $list_location->category_id = $request->category_id;
         $list_location->description = $request->description;
         $list_location->tag = $request->tag;
         $list_location->contact = $request->contact;
         $list_location->latitude = $request->latitude;
-        $list_location->longitude = $request->longitude;
+        $list_location->longtitude = $request->longtitude;
         $list_location->save();
         return response()->json($list_location);
 
