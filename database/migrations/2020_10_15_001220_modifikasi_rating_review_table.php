@@ -14,10 +14,10 @@ class ModifikasiRatingReviewTable extends Migration
     public function up()
     {
         Schema::table('rating_reviews', function(Blueprint $table) {
-            // $table->integer('list_location_id')->after('id');
-            // $table->index('list_location_id');
-            // $table->integer('user_id')->after('id');
-            // $table->index('user_id');
+            $table->integer('list_location_id')->after('id');
+            $table->index('list_location_id');
+            $table->integer('user_id')->after('id');
+            $table->index('user_id');
        });
     }
 

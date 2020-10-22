@@ -23,14 +23,14 @@ class ListLocations extends Model
         'tag',
         'contact',
         'latitude',
-        'longtitude',
+        'longitude',
         'created_at',
     ];
 
 
     protected $casts = [
         'latitude' => 'double',
-        'longtitude' => 'double',
+        'longitude' => 'double',
     ];
 
     protected $hidden = [
@@ -38,9 +38,9 @@ class ListLocations extends Model
 
 
 
-    public function users()
-    {
-    	return $this->belongsToMany('App\Models\Users', 'user_list_locations');
-    }
+    // public function users()
+    // {
+    // 	return $this->belongsToMany('App\Models\Users', 'user_list_locations');
+    // }
 
 }

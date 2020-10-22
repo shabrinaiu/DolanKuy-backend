@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ListLocationsController;
 use App\Http\Controllers\CategoryLocationsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('register', [UsersController::class, 'register']);
+Route::post('login', [UsersController::class, 'login']);
+Route::get('user', [UsersController::class, 'getAuthenticatedUser'])->middleware('jwt.verify');
 
 Route::prefix('locations')->group(function () {
     Route::get('/', [ListLocationsController::class, 'index']);
