@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = "users";
+    protected $table = "user";
     public $timestamps = true;
 
     protected $fillable = [
@@ -19,8 +19,6 @@ class User extends Authenticatable
         'email',
         'password',
         'image',
-        'latitude',
-        'longitude',
         'created_at',
     ];
 
