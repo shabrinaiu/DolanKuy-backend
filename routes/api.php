@@ -26,7 +26,7 @@ Route::prefix('locations')->group(function () {
     Route::get('/{id}', [ListLocationsController::class, 'show']);
     Route::post('/', [ListLocationsController::class, 'store']);
     Route::put('/update/{id}', [ListLocationsController::class, 'update']);
-    Route::delete('/delete', [ListLocationsController::class, 'delete']);
+    Route::delete('/delete/{id}', [ListLocationsController::class, 'destroy']);
 });
 
 Route::prefix('category')->group(function () {
