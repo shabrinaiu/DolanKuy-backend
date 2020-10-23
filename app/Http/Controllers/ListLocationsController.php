@@ -94,7 +94,7 @@ class ListLocationsController extends Controller
         $list_location->tag = $request->tag;
         $list_location->contact = $request->contact;
         $list_location->latitude = $request->latitude;
-        $list_location->longitude = $request->longtitude;
+        $list_location->longitude = $request->longitude;
         $list_location->save();
         return response()->json($list_location);
 
