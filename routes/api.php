@@ -36,29 +36,3 @@ Route::prefix('category')->group(function () {
     Route::put('/update/{id}', [CategoryLocationsController::class, 'update']);
     Route::delete('/delete', [CategoryLocationsController::class, 'delete']);
 });
-
-
-// $api = app('Dingo\Api\Routing\Router');
-
-// $api->version('v1', function($api) {
-//     $api->group(['namespace' => 'App\Http\Controllers'], function() use($api) {
-
-//         $api->get('/', 'ListLocationsController@index');
-//         $api->get('/{id}', 'ListLocationsController@show');
-//         $api->post('/', 'ListLocationsController@store');
-//         $api->put('/update/{id}', 'ListLocationsController@update');
-//         $api->delete('location/delete/', 'ListLocationsController@delete');
-
-//     });
-
-//     $api->group(['namespace' => 'App\Http\Controllers'], function() use($api) {
-
-//         $api->get('category', 'CategoryLocationsController@index');
-//         $api->get('category/{id}', 'CategoryLocationsController@show');
-//         $api->post('category', 'CategoryLocationsController@store');
-//         $api->put('category/{id}/update', 'CategoryLocationsController@update');
-//         $api->delete('category/{id}/delete', 'CategoryLocationsController@delete');
-
-//     });
-
-// });
