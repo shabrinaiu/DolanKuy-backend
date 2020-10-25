@@ -221,6 +221,7 @@
         },
         {
             "name": "doctrine/dbal",
+<<<<<<< HEAD
             "version": "2.12.0",
             "source": {
                 "type": "git",
@@ -231,6 +232,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/dbal/zipball/c6d37b4c42aaa3c3ee175f05eca68056f4185646",
                 "reference": "c6d37b4c42aaa3c3ee175f05eca68056f4185646",
+=======
+            "version": "2.11.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/dbal.git",
+                "reference": "fb5d5f2f26babf8dce217b1eb88300c22bb703a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fb5d5f2f26babf8dce217b1eb88300c22bb703a4",
+                "reference": "fb5d5f2f26babf8dce217b1eb88300c22bb703a4",
+>>>>>>> 3399bf10b2f66d298edda6a5c0871969969b5321
                 "shasum": ""
             },
             "require": {
@@ -310,7 +323,11 @@
                 "sqlserver",
                 "sqlsrv"
             ],
+<<<<<<< HEAD
             "time": "2020-10-22T17:26:24+00:00"
+=======
+            "time": "2020-10-20T14:36:48+00:00"
+>>>>>>> 3399bf10b2f66d298edda6a5c0871969969b5321
         },
         {
             "name": "doctrine/event-manager",
@@ -1631,6 +1648,7 @@
         },
         {
             "name": "nesbot/carbon",
+<<<<<<< HEAD
             "version": "2.41.5",
             "source": {
                 "type": "git",
@@ -1641,6 +1659,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/c4a9caf97cfc53adfc219043bcecf42bc663acee",
                 "reference": "c4a9caf97cfc53adfc219043bcecf42bc663acee",
+=======
+            "version": "2.41.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/briannesbitt/Carbon.git",
+                "reference": "6571aec754a648ef476a8d8f57993f7bc965afe4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/6571aec754a648ef476a8d8f57993f7bc965afe4",
+                "reference": "6571aec754a648ef476a8d8f57993f7bc965afe4",
+>>>>>>> 3399bf10b2f66d298edda6a5c0871969969b5321
                 "shasum": ""
             },
             "require": {
@@ -1706,7 +1736,11 @@
                 "datetime",
                 "time"
             ],
+<<<<<<< HEAD
             "time": "2020-10-23T06:02:30+00:00"
+=======
+            "time": "2020-10-22T07:28:05+00:00"
+>>>>>>> 3399bf10b2f66d298edda6a5c0871969969b5321
         },
         {
             "name": "nikic/php-parser",
