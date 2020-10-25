@@ -35,7 +35,7 @@ class ListLocationsController extends Controller
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
-            'longtitude' => 'required'
+            'longitude' => 'required'
         ]);
 
         $list_location = ListLocations::create([
@@ -47,7 +47,7 @@ class ListLocationsController extends Controller
             'tag' => $request->tag,
             'contact' => $request->contact,
             'latitude' => $request->latitude,
-            'longtitude' => $request->longtitude,
+            'longitude' => $request->longitude,
         ]);
         return response()->json($list_location);
     }
@@ -82,7 +82,7 @@ class ListLocationsController extends Controller
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
-            'longtitude' => 'required'
+            'longitude' => 'required'
         ]);
 
         $list_location = ListLocations::find($id);
@@ -94,7 +94,7 @@ class ListLocationsController extends Controller
         $list_location->tag = $request->tag;
         $list_location->contact = $request->contact;
         $list_location->latitude = $request->latitude;
-        $list_location->longtitude = $request->longtitude;
+        $list_location->longitude = $request->longitude;
         $list_location->save();
         return response()->json($list_location);
 

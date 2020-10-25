@@ -6,8 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
@@ -19,8 +20,8 @@ class User extends Authenticatable
         'email',
         'password',
         'image',
-        'latitude',
-        'longitude',
+        // 'latitude',
+        // 'longitude',
         'created_at',
     ];
 
@@ -33,8 +34,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function listLocations()
+    public function getJWTIdentifier()
     {
-    	return $this->belongsToMany('App\Models\ListLocations', 'user_list_locations');
+        return $this->getKey();
     }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    // public function listLocations()
+    // {
+    // 	return $this->belongsToMany('App\Models\ListLocations', 'user_list_locations');
+    // }
 }
