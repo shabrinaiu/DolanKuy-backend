@@ -17,7 +17,6 @@ class RelasitambahanRatingReviewTable extends Migration
             $table->integer('list_location_id')->unsigned()->change();
             $table->foreign('list_location_id')->references('id')->on('list_locations')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('list_locations_id')->constrained('list_locations');
         });
     }
 

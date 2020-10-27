@@ -21,18 +21,25 @@ Route::post('register', [UsersController::class, 'register']);
 Route::post('login', [UsersController::class, 'login']);
 Route::get('user', [UsersController::class, 'getAuthenticatedUser'])->middleware('jwt.verify');
 
+Route::group(['middleware' =>['auth', 'jwt.verify']], function () {
+    Route::get('/locations', [ListLocationsController::class, 'index']);
+    Route::get('/locations/{id}', [ListLocationsController::class, 'show']);
+    Route::get('/category', [CategoryLocationsController::class, 'index']);
+    Route::get('/category/{id}', [CategoryLocationsController::class, 'show']);
+});
+
+
 Route::prefix('locations')->group(function () {
-    Route::get('/', [ListLocationsController::class, 'index']);
-    Route::get('/{id}', [ListLocationsController::class, 'show']);
+    // Route::get('/', [ListLocationsController::class, 'index']);
+    // Route::get('/{id}', [ListLocationsController::class, 'show']);
     Route::post('/', [ListLocationsController::class, 'store']);
     Route::put('/update/{id}', [ListLocationsController::class, 'update']);
-    Route::delete('/delete', [ListLocationsController::class, 'delete']);
+    Route::delete('/delete/{id}', [ListLocationsController::class, 'destroy']);
 });
 
 Route::prefix('category')->group(function () {
-    Route::get('/', [CategoryLocationsController::class, 'index']);
-    Route::get('/{id}', [CategoryLocationsController::class, 'show']);
+    
     Route::post('/', [CategoryLocationsController::class, 'store']);
     Route::put('/update/{id}', [CategoryLocationsController::class, 'update']);
-    Route::delete('/delete', [CategoryLocationsController::class, 'delete']);
+    Route::delete('/delete/{id}', [CategoryLocationsController::class, 'destroy']);
 });

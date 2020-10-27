@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Users;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -73,4 +76,43 @@ class UsersController extends Controller
 
         return response()->json(compact('users'));
     }
+
+    public function editProfile(Users $users) {
+        return response()->json($users);
+    }
+
+    public function update(Request $request, Users $users) {
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'image' => 'required|image|mimes:png,jpeg,jpg'
+        ]);
+
+        if($request->hasFile('image')) {
+            Storage::delete('/public/users/' . $users->image);
+        }
+
+        $file = $request->file('image');
+        $filename =  time() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('/public/users/', $filename);
+        
+        $users = Users::update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'image' => $filename
+        ]);
+        return response()->json($users);
+    }
+
+    public function storeLocation(Request $request, Users $users) {
+        $users = Users::update([
+            'longitude' => $request->longitude,
+            'latitude' => $request->latitude
+        ]);
+        return response()->json(compact('users'));
+    }
+
 }
