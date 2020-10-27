@@ -13,12 +13,12 @@ class ModifikasiUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        // Schema::table('users', function (Blueprint $table) {
             
           
-            //Juga mendukung multiple coloum (array type)
-            $table->dropColumn(['latitude', 'longitude']);
-        });
+        //     //Juga mendukung multiple coloum (array type)
+        //     $table->dropColumn(['latitude', 'longitude']);
+        // });
     }
 
     /**

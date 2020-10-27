@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RelasiRatingReviewTable extends Migration
+class ModifikasiGalery extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class RelasiRatingReviewTable extends Migration
      */
     public function up()
     {
-        Schema::table('rating_reviews', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned()->change();
-            $table->foreign('user_id')->references('id')->on('users')
-                ->onUpdate('cascade')->onDelete('cascade');
+        Schema::table('galery', function (Blueprint $table) {
+
+            $table->integer('list_location_id')->after('id');
+            $table->index('list_location_id');
+
         });
     }
 
