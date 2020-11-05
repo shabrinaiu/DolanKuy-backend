@@ -14,6 +14,7 @@ class Galery extends Model
     protected $fillable = [
         'filename',
         'created_at',
+        'list_location_id'
     ];
     protected $hidden = [
     ];
