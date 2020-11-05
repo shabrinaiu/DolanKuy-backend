@@ -85,17 +85,18 @@ class ListLocationsController extends Controller
         }
         $file = $request->file('image');
         $filename = time() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('public/dolankuy/', $filename);  
-        $list_location->name = $request->name;
-        $list_location->address = $request->address;
-        $list_location->image = $filename;
-        $list_location->category_id = $request->category_id;
-        $list_location->description = $request->description;
-        $list_location->tag = $request->tag;
-        $list_location->contact = $request->contact;
-        $list_location->latitude = $request->latitude;
-        $list_location->longitude = $request->longitude;
-        $list_location->save();
+        $file->storeAs('public/dolankuy/', $filename); 
+        $list_location->update([ 
+            'name' => $request->name,
+            'address' => $request->address,
+            'image' => $filename,
+            'category_id' => $request->category_id,
+            'description' => $request->description,
+            'tag' => $request->tag,
+            'contact' => $request->contact,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
+        ]);
         
         return response()->json($list_location);
 

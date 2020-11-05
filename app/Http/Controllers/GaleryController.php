@@ -19,40 +19,57 @@ class GaleryController extends Controller
    
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'filename' => 'required',
+        $request->validate([
+            'image' => 'required|image|mimes:png,jpeg,jpg',
+            'list_location_id' => 'required|exists:ListLocations,id'
         ]);
 
-        $category = CategoryLocations::create([
-            'name'=> $request->name
+        $file = $request->file('image');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('public/dolankuy/', $filename);
+        $galery = Galery::create([
+            'list_location_id' => $request->list_location_id,
+            'filename' => $filename,
         ]);
         
-        return response()->json($category);
+        return response()->json($galery);
     }
 
-    public function show(ListLocations $list_location)
+    public function show($id)
     {
-        $galery = DB::table('galery')->where('list_location_id', $list_location->id)->get();;
+        $galery = Galery::find($id);
         return response()->json($galery);
     }
 
     
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'name' => 'required'
-         ]);
-      
-         $category = CategoryLocations::find($id);
-         $category->name = $request->name;
-         $category->save();
-         return response()->json($category);
+        $galery = Galery::find($id);
+        $request->validate([
+            'image' => 'required|image|mimes:png,jpeg,jpg',
+            'list_location_id' => 'required'
+        ]);
+
+        if($request->hasFile('image')) {
+            Storage::delete('/public/dolankuy/' . $galery->filename);
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/dolankuy/', $filename);
+            $galery->update([
+                'list_location_id' => $request->list_location_id,
+                'filename' => $filename,
+            ]);
+        }
+
+        return response()->json($galery);
+
     }
 
     
     public function destroy($id)
     {
         $galery = Galery::find($id);
+        Storage::delete('/public/dolankuy/' . $galery->filename);
         $galery->delete();
         return response()->json($galery);
     }

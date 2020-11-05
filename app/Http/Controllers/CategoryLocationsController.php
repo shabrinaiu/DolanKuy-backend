@@ -32,7 +32,7 @@ class CategoryLocationsController extends Controller
     {
         $category = CategoryLocations::find($id);
         $currentLocation = DB::table('list_locations')->where('category_id', $category->id)->get();
-        return response()->json($currentLocation);
+        return response()->json([$currentLocation, $category]);
     }
 
     
@@ -43,8 +43,10 @@ class CategoryLocationsController extends Controller
          ]);
       
          $category = CategoryLocations::find($id);
-         $category->name = $request->name;
-         $category->save();
+         $category->update([
+            'name' => $request->name,
+         ]);
+         
          return response()->json($category);
     }
 
