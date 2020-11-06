@@ -21,7 +21,17 @@ class ListLocationsController extends Controller
         return response()->json([$list_location, $category, $galery]);
     }
 
-   
+    public function search(Request $request)
+	{
+		$search = $request->search;
+ 
+    	$list_location = DB::table('list_locations')
+		->where('address','like',"%".$search."%");
+ 
+    	return response()->json([$list_location]);
+ 
+	}
+
     public function store(Request $request)
     {
         $this->validate($request,[
