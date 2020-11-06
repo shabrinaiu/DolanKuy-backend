@@ -4,26 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ListLocations;
+use App\Models\Galery;
+use App\Models\CategoryLocations;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ListLocationsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
+        $category = CategoryLocations::all();
         $list_location = ListLocations::all();
-        return response()->json($list_location);
+        $galery = Galery::all();
+        return response()->json([$list_location, $category, $galery]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -31,46 +29,41 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             'tag' => 'required',
-            'image' => 'required',
+            'image' => 'required|image|mimes:png,jpeg,jpg',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
             'longitude' => 'required'
         ]);
 
-        $list_location = ListLocations::create([
-            'name' => $request->name,
-            'address' => $request->address,
-            'description' => $request->description,
-            'category_id' => $request->category_id,
-            'image' => $request->image,
-            'tag' => $request->tag,
-            'contact' => $request->contact,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-        ]);
+        
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/dolankuy/', $filename);
+
+            $list_location = ListLocations::create([
+                'name' => $request->name,
+                'address' => $request->address,
+                'description' => $request->description,
+                'category_id' => $request->category_id,
+                'image' => $filename,
+                'tag' => $request->tag,
+                'contact' => $request->contact,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+            ]);
+        
         return response()->json($list_location);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         $list_location = ListLocations::find($id);
-        return response()->json($list_location);
+        $currentGalery = DB::table('galery')->where('list_location_id', $list_location->id)->get();
+        return response()->json([$list_location, $currentGalery]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $this->validate($request,[
@@ -78,7 +71,7 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             'tag' => 'required',
-            'image' => 'required',
+            'image' => 'required|image|mimes:png,jpeg,jpg',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
@@ -86,29 +79,38 @@ class ListLocationsController extends Controller
         ]);
 
         $list_location = ListLocations::find($id);
-        $list_location->name = $request->name;
-        $list_location->address = $request->address;
-        $list_location->image = $request->image;
-        $list_location->category_id = $request->category_id;
-        $list_location->description = $request->description;
-        $list_location->tag = $request->tag;
-        $list_location->contact = $request->contact;
-        $list_location->latitude = $request->latitude;
-        $list_location->longitude = $request->longitude;
-        $list_location->save();
+
+        if($request->hasFile('image')) {
+            Storage::delete('/public/dolankuy/' . $list_location->image);
+        }
+        $file = $request->file('image');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('public/dolankuy/', $filename); 
+        $list_location->update([ 
+            'name' => $request->name,
+            'address' => $request->address,
+            'image' => $filename,
+            'category_id' => $request->category_id,
+            'description' => $request->description,
+            'tag' => $request->tag,
+            'contact' => $request->contact,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
+        ]);
+        
         return response()->json($list_location);
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $list_location = ListLocations::find($id);
+        $currentGalery = DB::table('galery')->where('list_location_id', $list_location->id)->get();
+        if($request->hasFile('image')) {
+            foreach ($currentGalery as $key => $value) {
+                Storage::delete('/public/dolankuy/' . $value->filename);
+            }
+        }
         $list_location->delete();
         return response()->json($list_location);
     }
