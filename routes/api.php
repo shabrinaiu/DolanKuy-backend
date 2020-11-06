@@ -18,6 +18,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group(['middleware' => 'jwt.verify'], function(){
+    Route::post('logout', [UsersController::class, 'logout']);
+    // Route::post('refresh', [UsersController::class, 'refresh']);
+    Route::post('me', [UsersController::class, 'me']);
+    Route::post('test', [UsersController::class, 'test']);
+});
+
 Route::post('register', [UsersController::class, 'register']);
 Route::post('login', [UsersController::class, 'login']);
 Route::get('user', [UsersController::class, 'getAuthenticatedUser'])->middleware('jwt.verify');
