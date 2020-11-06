@@ -47,6 +47,7 @@ Route::prefix('galery')->group(function () {
 
 Route::prefix('locations')->group(function () {
     Route::get('/', [ListLocationsController::class, 'index']);
+    Route::get('/search', [ListLocationsController::class, 'search']);
     Route::get('/{id}', [ListLocationsController::class, 'show']);
     Route::post('/', [ListLocationsController::class, 'store']);
     Route::put('/update/{id}', [ListLocationsController::class, 'update']);
