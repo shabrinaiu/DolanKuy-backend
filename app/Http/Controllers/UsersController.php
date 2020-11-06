@@ -11,9 +11,45 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
+    public function test() {
+        if (Auth::guard('users')->check()){
+            $auth = Auth::guard('users')->user();
+        }
+        return response()->json([$auth]);
+    }
+    
+    public function me() {
+        $credentials = JWTAuth::parseToken()->authenticate();
+        return response()->json([$credentials]);
+    }
+
+    public function logout() {
+        if (Auth::guard('users')->check()){
+            auth()->guard('users')->logout();
+        }
+        return response()->json(['message' => 'Successfully loged out']);
+    }
+
+    // public function refresh() {
+    //     if (Auth::guard('users')->check()){
+    //         $auth = $this->respondWithToken(auth('users')->refresh());
+    //     }
+    //     return response()->json([$auth]);
+    // }
+
+    // protected function respondWithToken($token, $users) {
+    //     return response()->json([
+    //         'access_token' => $token,
+    //         'token_type' => 'bearer',
+    //         'expires_in' => auth($users)->factory()->getTTL() * 60,
+    //         'account' => auth($users)->user()
+    //     ]);
+    // }
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
