@@ -15,18 +15,22 @@ class GaleryController extends Controller
         $galery = Galery::all();
         return response()->json($galery);
     }
-
    
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:png,jpeg,jpg',
-            'list_location_id' => 'required|exists:ListLocations,id'
+            'filename' => 'required|image|mimes:png,jpeg,jpg',
+            'list_location_id' => 'required'
         ]);
+        
+        if($request->hasFile('filename')) {
+            $file = $request->file('filename');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/dolankuy/', $filename);
+        }else{
+            $filename= $request->filename;
+        }
 
-        $file = $request->file('image');
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('public/dolankuy/', $filename);
         $galery = Galery::create([
             'list_location_id' => $request->list_location_id,
             'filename' => $filename,
@@ -46,20 +50,23 @@ class GaleryController extends Controller
     {
         $galery = Galery::find($id);
         $request->validate([
-            'image' => 'required|image|mimes:png,jpeg,jpg',
+            'filename' => 'required|filename|mimes:png,jpeg,jpg',
             'list_location_id' => 'required'
         ]);
 
-        if($request->hasFile('image')) {
+        if($request->hasFile('filename')) {
             Storage::delete('/public/dolankuy/' . $galery->filename);
-            $file = $request->file('image');
+            $file = $request->file('filename');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/dolankuy/', $filename);
-            $galery->update([
-                'list_location_id' => $request->list_location_id,
-                'filename' => $filename,
-            ]);
+            $file->storeAs('public/dolankuy/', $filename);  
+        }else{
+            $filename=$request->filename;
         }
+
+        $galery->update([
+            'list_location_id' => $request->list_location_id,
+            'filename' => $filename,
+        ]);
 
         return response()->json($galery);
 

@@ -13,12 +13,41 @@ use Illuminate\Support\Facades\DB;
 class ListLocationsController extends Controller
 {
     
-    public function index()
+    public function deg2rad($deg) {
+        return $deg * (pi/180);
+    }
+
+    public function getDistance($lat1, $lat2, $long1, $long2) {
+        $radius = 6371;
+        $dLat = deg2rad($lat2-$lat1);
+        $dLong = deg2rad($long2-$long1);
+        $a = sin($dLat/2) * sin($dLat/2) +
+             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+             sin($dLong/2) * sin($dLong/2);
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+        $distance = $radius * $c;
+
+        if ($distance < 1){
+            $distance = $distance * 1000;
+        }
+
+        return $distance;
+
+    }
+    public function index(Request $request)
     {
         $category = CategoryLocations::all();
         $list_location = ListLocations::all();
-        $galery = Galery::all();
-        return response()->json([$list_location, $category, $galery]);
+        foreach ($list_location as $key ) {
+            if($request->userLat==0 && $request->userLong==0){
+                $distance[] = 0;    
+            }else {
+                $distance[] = ListLocationsController::getDistance(
+                              $request->userLat, $key->latitude, $request->userLong, $key->longitude);
+            }
+        }
+        
+        return response()->json([$list_location, $category, $distance]);
     }
 
     public function search(Request $request)
@@ -38,18 +67,21 @@ class ListLocationsController extends Controller
             'name' => 'required',
             'address' => 'required',
             'description' => 'required',
-            'tag' => 'required',
-            'image' => 'required|image|mimes:png,jpeg,jpg',
+            //'tag' => 'required',
+            'image' => 'required',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
             'longitude' => 'required'
         ]);
 
-        
+        if($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/dolankuy/', $filename);
+        }else{
+            $filename= $request->image;
+        }
 
             $list_location = ListLocations::create([
                 'name' => $request->name,
@@ -57,7 +89,7 @@ class ListLocationsController extends Controller
                 'description' => $request->description,
                 'category_id' => $request->category_id,
                 'image' => $filename,
-                'tag' => $request->tag,
+                //'tag' => $request->tag,
                 'contact' => $request->contact,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
@@ -80,8 +112,8 @@ class ListLocationsController extends Controller
             'name' => 'required',
             'address' => 'required',
             'description' => 'required',
-            'tag' => 'required',
-            'image' => 'required|image|mimes:png,jpeg,jpg',
+            //'tag' => 'required',
+            'image' => 'required',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
@@ -92,17 +124,20 @@ class ListLocationsController extends Controller
 
         if($request->hasFile('image')) {
             Storage::delete('/public/dolankuy/' . $list_location->image);
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/dolankuy/', $filename);
+        }else{
+            $filename =$request->image;
         }
-        $file = $request->file('image');
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('public/dolankuy/', $filename); 
+         
         $list_location->update([ 
             'name' => $request->name,
             'address' => $request->address,
             'image' => $filename,
             'category_id' => $request->category_id,
             'description' => $request->description,
-            'tag' => $request->tag,
+            //'tag' => $request->tag,
             'contact' => $request->contact,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude
