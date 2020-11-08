@@ -19,36 +19,21 @@ class UsersController extends Controller
         if (Auth::guard('users')->check()){
             $auth = Auth::guard('users')->user();
         }
-        return response()->json([$auth]);
+        return response()->json($auth);
     }
     
     public function me() {
         $credentials = JWTAuth::parseToken()->authenticate();
-        return response()->json([$credentials]);
+        return response()->json($credentials);
     }
 
     public function logout() {
         if (Auth::guard('users')->check()){
             auth()->guard('users')->logout();
+            return response()->json(['message' => 'Successfully loged out']);
         }
-        return response()->json(['message' => 'Successfully loged out']);
+        return response()->json(['message' => 'Failed loged out']);
     }
-
-    // public function refresh() {
-    //     if (Auth::guard('users')->check()){
-    //         $auth = $this->respondWithToken(auth('users')->refresh());
-    //     }
-    //     return response()->json([$auth]);
-    // }
-
-    // protected function respondWithToken($token, $users) {
-    //     return response()->json([
-    //         'access_token' => $token,
-    //         'token_type' => 'bearer',
-    //         'expires_in' => auth($users)->factory()->getTTL() * 60,
-    //         'account' => auth($users)->user()
-    //     ]);
-    // }
 
     public function login(Request $request)
     {
@@ -81,6 +66,8 @@ class UsersController extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
+            'image'=>'N/A',
+            'role'=>'user',
         ]);
 
         $token = JWTAuth::fromUser($users);
@@ -113,42 +100,43 @@ class UsersController extends Controller
         return response()->json(compact('users'));
     }
 
-    public function editProfile(Users $users) {
-        return response()->json($users);
-    }
+    public function update(Request $request) {
 
-    public function update(Request $request, Users $users) {
+        $users = JWTAuth::parseToken()->authenticate();
         
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'image' => 'required|image|mimes:png,jpeg,jpg'
         ]);
 
-        if($request->hasFile('image')) {
-            Storage::delete('/public/users/' . $users->image);
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $file = $request->file('image');
-        $filename =  time() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('/public/users/', $filename);
-        
-        $users = Users::update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'image' => $filename
+        if($users->role == 'admin'){
+            $role = 'admin';
+        } elseif ($users->role == 'user'){
+            $role = 'user';
+        }
+
+        if($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/users/', $filename);
+        }else{
+            $filename= 'N/A';
+        }
+
+        $users->update([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => Hash::make($request->get('password')),
+            'image'=>$filename,
+            'role'=>$role,
         ]);
+
         return response()->json($users);
+        
     }
-
-    public function storeLocation(Request $request, Users $users) {
-        $users = Users::update([
-            'longitude' => $request->longitude,
-            'latitude' => $request->latitude
-        ]);
-        return response()->json(compact('users'));
-    }
-
 }
