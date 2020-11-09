@@ -43,7 +43,7 @@ class ListLocationsController extends Controller
                 $distance[] = 0;    
             }else {
                 $distance[] = ListLocationsController::getDistance(
-                              $request->userLat, $key->latitude, $request->userLong, $key->longitude);
+                              $request->get('userLat'), $key->latitude, $request->get('userLong'), $key->longitude);
             }
         }
         
