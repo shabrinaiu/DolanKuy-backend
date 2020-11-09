@@ -51,16 +51,18 @@ class CategoryLocationsController extends Controller
     }
 
     
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $category = CategoryLocations::find($id);
         $currentLocation = DB::table('list_locations')->where('category_id', $category->id)->get();
         
-        foreach ($currentLocation as $key1 => $value1) {
-            Storage::delete('/public/dolankuy/' . $value1->image);
-            $currentGalery = DB::table('galery')->where('list_location_id', $value1->id)->get();
-            foreach ($currentGalery as $key2 => $value2) {
-                Storage::delete('/public/dolankuy/' . $value2->filename);
+        if($request->hasFile('image')) {
+            foreach ($currentLocation as $key1 => $value1) {
+                Storage::delete('/public/dolankuy/' . $value1->image);
+                $currentGalery = DB::table('galery')->where('list_location_id', $value1->id)->get();
+                foreach ($currentGalery as $key2 => $value2) {
+                    Storage::delete('/public/dolankuy/' . $value2->filename);
+                }
             }
         }
         

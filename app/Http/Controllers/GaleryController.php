@@ -49,8 +49,9 @@ class GaleryController extends Controller
     public function update(Request $request, $id)
     {
         $galery = Galery::find($id);
+        
         $request->validate([
-            'filename' => 'required|filename|mimes:png,jpeg,jpg',
+            'filename' => 'required|image|mimes:png,jpeg,jpg',
             'list_location_id' => 'required'
         ]);
 
@@ -73,10 +74,12 @@ class GaleryController extends Controller
     }
 
     
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $galery = Galery::find($id);
-        Storage::delete('/public/dolankuy/' . $galery->filename);
+        if($request->hasFile('image')) {
+            Storage::delete('/public/dolankuy/' . $galery->filename);
+        }
         $galery->delete();
         return response()->json($galery);
     }

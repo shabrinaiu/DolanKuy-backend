@@ -37,13 +37,13 @@ Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']
     Route::get('/', [GaleryController::class, 'index']);
     Route::get('/{id}', [GaleryController::class, 'show']);
     Route::post('/', [GaleryController::class, 'store']);
-    Route::put('/update/{id}', [GaleryController::class, 'update']);
+    Route::post('/update/{id}', [GaleryController::class, 'update']);
     Route::delete('/delete/{id}', [GaleryController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'locations',  'middleware' => ['jwt.verify','role.check']], function() {
     Route::post('/', [ListLocationsController::class, 'store']);
-    Route::put('/update/{id}', [ListLocationsController::class, 'update']);
+    Route::post('/update/{id}', [ListLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [ListLocationsController::class, 'destroy']);
 });
 

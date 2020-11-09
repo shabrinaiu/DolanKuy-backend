@@ -55,7 +55,7 @@ class ListLocationsController extends Controller
 		$search = $request->search;
  
     	$list_location = DB::table('list_locations')
-		->where('address','like',"%".$search."%");
+		->where('address','like',"%".$search."%")->get();
  
     	return response()->json([$list_location]);
  
@@ -68,7 +68,7 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             //'tag' => 'required',
-            'image' => 'required',
+            'image' => 'required|image|mimes:png,jpeg,jpg',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
@@ -113,7 +113,7 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             //'tag' => 'required',
-            'image' => 'required',
+            'image' => 'required|image|mimes:png,jpeg,jpg',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
