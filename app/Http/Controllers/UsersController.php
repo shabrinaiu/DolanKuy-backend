@@ -106,18 +106,12 @@ class UsersController extends Controller
         
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
-        }
-
-        if($users->role == 'admin'){
-            $role = 'admin';
-        } elseif ($users->role == 'user'){
-            $role = 'user';
         }
 
         if($request->hasFile('image')) {
@@ -128,12 +122,17 @@ class UsersController extends Controller
             $filename= 'N/A';
         }
 
+        if($request->get('password')==NULL){
+            $password = $users->password;
+        } else{
+            $password = $request->get('password');
+        }
+
         $users->update([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
-            'image'=>$filename,
-            'role'=>$role,
+            'password' => Hash::make($password),
+            'image'=>$filename
         ]);
 
         return response()->json($users);
