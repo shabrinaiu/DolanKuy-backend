@@ -32,6 +32,7 @@ Route::get('/locations', [ListLocationsController::class, 'index'])->name('user'
 Route::get('/locations/search', [ListLocationsController::class, 'search']);
 Route::get('/locations/{id}', [ListLocationsController::class, 'show']);
 Route::get('/category/{id}', [CategoryLocationsController::class, 'show']);
+Route::get('/akomodasi', [ListLocationsController::class, 'getAcomodation']);
 
 Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']], function() {
     Route::get('/', [GaleryController::class, 'index']);

@@ -34,20 +34,60 @@ class ListLocationsController extends Controller
         return $distance;
 
     }
+
+    public function getAcomodation(Request $request)
+    {
+        $category = DB::table('category_locations')
+        ->where('name', 'not like', 'Wisata')->get();
+
+        foreach ($category as $key) {
+            $id[] = $key->id;
+        }
+
+        $acomodation = DB::table('list_locations')
+        ->where('category_id', '=', $id[0],
+                'or', '=', $id[1],
+                'or', '=', $id[2],
+                'or', '=', $id[3])->get();
+
+        $distance[] = "";
+        
+        foreach ($acomodation as $key ) {
+            if($request->userLat==0 && $request->userLong==0){
+                $distance[] = 0;    
+            }else {
+                $distance[] = ListLocationsController::getDistance(
+                              $request->get('userLat'), $key->latitude, 
+                              $request->get('userLong'), $key->longitude);
+            }
+        }
+        
+        unset($distance[0]);
+
+        return response()->json([$category, $acomodation, $distance]);
+    }
+
     public function index(Request $request)
     {
-        $category = CategoryLocations::all();
-        $list_location = ListLocations::all();
+        $category = DB::table('category_locations')
+        ->where('name', 'like', 'Wisata')->get()->first();
+
+        $list_location = DB::table('list_locations')
+        ->where('category_id', '=', $category->id)->get();
+
+        $galery = Galery::all();
+
         foreach ($list_location as $key ) {
             if($request->userLat==0 && $request->userLong==0){
                 $distance[] = 0;    
             }else {
                 $distance[] = ListLocationsController::getDistance(
-                              $request->get('userLat'), $key->latitude, $request->get('userLong'), $key->longitude);
+                              $request->get('userLat'), $key->latitude, 
+                              $request->get('userLong'), $key->longitude);
             }
         }
         
-        return response()->json([$list_location, $category, $distance]);
+        return response()->json([$list_location, $galery, $distance]);
     }
 
     public function search(Request $request)
