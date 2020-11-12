@@ -9,6 +9,7 @@ use App\Models\CategoryLocations;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class ListLocationsController extends Controller
 {
@@ -41,28 +42,24 @@ class ListLocationsController extends Controller
         ->where('name', 'not like', 'Wisata')->get();
 
         foreach ($category as $key) {
-            $id[] = $key->id;
-        }
+            $temp = DB::table('list_locations')
+            ->where('category_id', '=', $key->id)->get();
 
-        $acomodation = DB::table('list_locations')
-        ->where('category_id', '=', $id[0],
-                'or', '=', $id[1],
-                'or', '=', $id[2],
-                'or', '=', $id[3])->get();
-
-        $distance[] = "";
-        
-        foreach ($acomodation as $key ) {
-            if($request->userLat==0 && $request->userLong==0){
-                $distance[] = 0;    
-            }else {
-                $distance[] = ListLocationsController::getDistance(
-                              $request->get('userLat'), $key->latitude, 
-                              $request->get('userLong'), $key->longitude);
+            foreach ($temp as $key2 ) {
+                $acomodation[] = $key2;
+                if(Auth::guard('users')->check()){
+                    if($request->userLat==0 && $request->userLong==0){
+                        $distance[] = 0;
+                    }else {
+                        $distance[] = ListLocationsController::getDistance(
+                                    $request->get('userLat'), $key2->latitude, 
+                                    $request->get('userLong'), $key2->longitude);
+                    }
+                }else {
+                    $distance[] = 0;
+                }
             }
         }
-        
-        unset($distance[0]);
 
         return response()->json([$category, $acomodation, $distance]);
     }
@@ -78,12 +75,16 @@ class ListLocationsController extends Controller
         $galery = Galery::all();
 
         foreach ($list_location as $key ) {
-            if($request->userLat==0 && $request->userLong==0){
-                $distance[] = 0;    
-            }else {
-                $distance[] = ListLocationsController::getDistance(
-                              $request->get('userLat'), $key->latitude, 
-                              $request->get('userLong'), $key->longitude);
+            if(Auth::guard('users')->check()){
+                if($request->userLat==0 && $request->userLong==0){
+                    $distance[] = 0;    
+                }else {
+                    $distance[] = ListLocationsController::getDistance(
+                                $request->get('userLat'), $key->latitude, 
+                                $request->get('userLong'), $key->longitude);
+                }
+            } else {
+                $distance[] = 0;
             }
         }
         
