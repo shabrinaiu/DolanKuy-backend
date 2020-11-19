@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryLocationsTable extends Migration
+class ModifikasiGalery extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateCategoryLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_locations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 255);
-            $table->timestamps();
+        Schema::table('galery', function (Blueprint $table) {
+
+            $table->integer('list_location_id')->after('id');
+            $table->index('list_location_id');
+
         });
     }
 
@@ -27,6 +28,6 @@ class CreateCategoryLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_locations');
+        //
     }
 }
