@@ -20,7 +20,6 @@ class ListLocations extends Model
         'description',
         'category_id',
         'image',
-        'tag',
         'contact',
         'latitude',
         'longitude',
