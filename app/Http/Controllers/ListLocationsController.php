@@ -94,10 +94,10 @@ class ListLocationsController extends Controller
         $list_location = DB::table('list_locations')
         ->where('category_id', '=', $category->id)->get();
 
-        $galery = Galery::all();
+        
 
         $response["locations"] = array();
-        $response["galery"] = array();
+        
 
         foreach ($list_location as $key ) {
             
@@ -129,8 +129,12 @@ class ListLocationsController extends Controller
 
         }
 
-        
-        array_push($response["galery"], $galery);
+        $galery = Galery::all();
+        $response["galery"] = array();
+
+        foreach ($galery as $key) {
+            array_push($response["galery"], $key);
+        }
         
         return response()->json($response);
     }
