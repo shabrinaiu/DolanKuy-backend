@@ -10,8 +10,28 @@ class CategoryLocationsController extends Controller
 {
     public function index()
     {
-        $category = CategoryLocations::all();
-        return response()->json($category);
+        $category = DB::table('category_locations')
+        ->where('name', 'not like', 'Wisata')->get();
+
+        $response["category"] = array();
+        
+        foreach ($category as $key) {
+            array_push($response["category"], $key);
+        }
+
+        return response()->json($response);
+    }
+
+    public function search($name){
+        
+        if($name == 'wisata'){
+            return response()->json('tidakAda');
+        }else {
+            $search = CategoryLocations::where('name', 'like', "%{$name}%")->get();
+            return response()->json($search);
+        }
+
+        
     }
 
    
@@ -31,8 +51,18 @@ class CategoryLocationsController extends Controller
     public function show($id)
     {
         $category = CategoryLocations::find($id);
+        $response["currentCategory"] = array();
+
+        array_push($response["currentCategory"], $category);
+
+        $response["currentLocation"] = array();
         $currentLocation = DB::table('list_locations')->where('category_id', $category->id)->get();
-        return response()->json([$currentLocation, $category]);
+        
+        foreach ($currentLocation as $key) {
+            array_push($response["currentLocation"], $key);
+        }
+        
+        return response()->json($response);
     }
 
     

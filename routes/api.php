@@ -32,7 +32,9 @@ Route::get('/locations', [ListLocationsController::class, 'index'])->name('user'
 Route::get('/locations/search', [ListLocationsController::class, 'search']);
 Route::get('/locations/{id}', [ListLocationsController::class, 'show']);
 Route::get('/category/{id}', [CategoryLocationsController::class, 'show']);
-Route::get('/akomodasi', [ListLocationsController::class, 'getAcomodation']);
+Route::get('/category', [CategoryLocationsController::class, 'index']);
+Route::get('/acomodation', [ListLocationsController::class, 'getAcomodation']);
+
 
 Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']], function() {
     Route::get('/', [GaleryController::class, 'index']);
@@ -49,7 +51,7 @@ Route::group(['prefix' => 'locations',  'middleware' => ['jwt.verify','role.chec
 });
 
 Route::group(['prefix' => 'category',  'middleware' => ['jwt.verify','role.check']], function() {
-    Route::get('/', [CategoryLocationsController::class, 'index']);
+    
     Route::post('/', [CategoryLocationsController::class, 'store']);
     Route::put('/update/{id}', [CategoryLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [CategoryLocationsController::class, 'destroy']);
