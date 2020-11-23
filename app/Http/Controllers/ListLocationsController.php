@@ -229,15 +229,13 @@ class ListLocationsController extends Controller
             //array_push($response["currentLocation"], $list_location);
         //}
 
-        
-
         $currentGalery = DB::table('galery')->where('list_location_id', $list_location->id)->get();
         
         // foreach ($currentGalery as $key) {
         //     array_push($response["currentGalery"], $key);
         // }
 
-        return response()->json(compact('list_location', 'currentGalery'));
+        return response()->json(compact('detail_location', 'currentGalery'));
     }
 
     public function update(Request $request, $id)
