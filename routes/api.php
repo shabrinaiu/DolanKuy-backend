@@ -28,6 +28,7 @@ Route::group(['middleware' => 'jwt.verify'], function(){
 Route::post('register', [UsersController::class, 'register']);
 Route::post('login', [UsersController::class, 'login']);
 
+Route::get('/dashboard', [ListLocationsController::class, 'dashboard']);
 Route::get('/locations', [ListLocationsController::class, 'index'])->name('user');
 Route::get('/locations/search', [ListLocationsController::class, 'search']);
 Route::get('/locations/{id}', [ListLocationsController::class, 'show']);
