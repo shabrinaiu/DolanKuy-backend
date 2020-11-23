@@ -221,7 +221,7 @@ class ListLocationsController extends Controller
     
     public function show($id)
     {
-        $list_location = ListLocations::find($id);
+        $detail_location = ListLocations::find($id);
         //$response["currentLocation"] = array();
         //$response["currentGalery"] = array();
 
@@ -229,7 +229,7 @@ class ListLocationsController extends Controller
             //array_push($response["currentLocation"], $list_location);
         //}
 
-        $currentGalery = DB::table('galery')->where('list_location_id', $list_location->id)->get();
+        $currentGalery = DB::table('galery')->where('list_location_id', $detail_location->id)->get();
         
         // foreach ($currentGalery as $key) {
         //     array_push($response["currentGalery"], $key);
