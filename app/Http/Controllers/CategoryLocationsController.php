@@ -51,18 +51,10 @@ class CategoryLocationsController extends Controller
     public function show($id)
     {
         $category = CategoryLocations::find($id);
-        $response["currentCategory"] = array();
 
-        array_push($response["currentCategory"], $category);
-
-        $response["currentLocation"] = array();
         $currentLocation = DB::table('list_locations')->where('category_id', $category->id)->get();
         
-        foreach ($currentLocation as $key) {
-            array_push($response["currentLocation"], $key);
-        }
-        
-        return response()->json($response);
+        return response()->json(compact('category', 'currentLocation'));
     }
 
     
