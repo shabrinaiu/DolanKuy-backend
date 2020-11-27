@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'jwt.verify'], function(){
     Route::post('logout', [UsersController::class, 'logout']);
-    Route::post('me', [UsersController::class, 'me']);
+    Route::get('me', [UsersController::class, 'getAuthenticatedUser']);
     Route::post('test', [UsersController::class, 'test']);
     Route::post('/editProfile', [UsersController::class, 'update']);
 });
