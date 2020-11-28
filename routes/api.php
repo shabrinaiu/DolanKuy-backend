@@ -39,7 +39,6 @@ Route::get('/acomodation', [ListLocationsController::class, 'getAcomodation']);
 
 Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']], function() {
     Route::get('/read', [GaleryController::class, 'index']);
-    Route::get('/{id}', [GaleryController::class, 'show']);
     Route::post('/create', [GaleryController::class, 'store']);
     Route::post('/update/{id}', [GaleryController::class, 'update']);
     Route::delete('/delete/{id}', [GaleryController::class, 'destroy']);
