@@ -36,6 +36,14 @@ class ListLocationsController extends Controller
 
     }
 
+    public function read(Request $request)
+    {
+
+        $list_location = ListLocations::all();
+        
+        return response()->json(compact('list_location'));
+    }
+
     public function dashboard(Request $request)
     {
 

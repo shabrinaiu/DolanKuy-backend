@@ -46,7 +46,7 @@ Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']
 });
 
 Route::group(['prefix' => 'locations',  'middleware' => ['jwt.verify','role.check']], function() {
-    Route::get('/read', [ListLocationsController::class, 'index'])->name('user');
+    Route::get('/read', [ListLocationsController::class, 'read']);
     Route::post('/create', [ListLocationsController::class, 'store']);
     Route::post('/update/{id}', [ListLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [ListLocationsController::class, 'destroy']);

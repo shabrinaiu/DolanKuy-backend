@@ -8,6 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryLocationsController extends Controller
 {
+
+
+    public function read()
+    {
+        $category = CategoryLocations::all();
+
+        $response["category"] = array();
+        
+        foreach ($category as $key) {
+            array_push($response["category"], $key);
+        }
+
+        return response()->json(compact('category'));
+    }
+
     public function index()
     {
         $category = DB::table('category_locations')
