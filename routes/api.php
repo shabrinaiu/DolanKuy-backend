@@ -38,22 +38,23 @@ Route::get('/acomodation', [ListLocationsController::class, 'getAcomodation']);
 
 
 Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']], function() {
-    Route::get('/', [GaleryController::class, 'index']);
+    Route::get('/read', [GaleryController::class, 'index']);
     Route::get('/{id}', [GaleryController::class, 'show']);
-    Route::post('/', [GaleryController::class, 'store']);
+    Route::post('/create', [GaleryController::class, 'store']);
     Route::post('/update/{id}', [GaleryController::class, 'update']);
     Route::delete('/delete/{id}', [GaleryController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'locations',  'middleware' => ['jwt.verify','role.check']], function() {
-    Route::post('/', [ListLocationsController::class, 'store']);
+    Route::get('/read', [ListLocationsController::class, 'index'])->name('user');
+    Route::post('/create', [ListLocationsController::class, 'store']);
     Route::post('/update/{id}', [ListLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [ListLocationsController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'category',  'middleware' => ['jwt.verify','role.check']], function() {
-    
-    Route::post('/', [CategoryLocationsController::class, 'store']);
+    Route::get('/read', [CategoryLocationsController::class, 'index']);
+    Route::post('/create', [CategoryLocationsController::class, 'store']);
     Route::put('/update/{id}', [CategoryLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [CategoryLocationsController::class, 'destroy']);
 });
