@@ -122,6 +122,18 @@ class UsersController extends Controller
             $filename= 'N/A';
         }
 
+        if($request->get('name')==NULL){
+            $password = $users->name;
+        } else{
+            $password = $request->get('password');
+        }
+
+        if($request->get('email')==NULL){
+            $password = $users->email;
+        } else{
+            $password = $request->get('password');
+        }
+
         if($request->get('password')==NULL){
             $password = $users->password;
         } else{

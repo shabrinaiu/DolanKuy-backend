@@ -13,7 +13,7 @@ class GaleryController extends Controller
     public function index()
     {
         $galery = Galery::all();
-        return response()->json($galery);
+        return response()->json(compact('galery'));
     }
    
     public function store(Request $request)
@@ -41,8 +41,8 @@ class GaleryController extends Controller
 
     public function show($id)
     {
-        $galery = Galery::find($id);
-        return response()->json($galery);
+        $currentGalery = Galery::find($id);
+        return response()->json(compact('currentGalery'));
     }
 
     
