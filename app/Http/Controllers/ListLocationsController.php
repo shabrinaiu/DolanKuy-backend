@@ -9,6 +9,7 @@ use App\Models\CategoryLocations;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class ListLocationsController extends Controller
 {
@@ -35,36 +36,88 @@ class ListLocationsController extends Controller
 
     }
 
+    public function read(Request $request)
+    {
+
+        $list_location = ListLocations::all();
+        
+        return response()->json(compact('list_location'));
+    }
+
+    public function dashboard(Request $request)
+    {
+
+        $list_location = ListLocations::all();
+
+        $response["locations"] = array();
+        
+        foreach ($list_location as $key ) {
+            
+            $distance["id"] = $key->id;
+            $distance["name"] = $key->name;
+            $distance["address"] = $key->address;
+            $distance["description"] = $key->description;
+            $distance["category_id"] = $key->category_id;
+            $distance["image"] = $key->image;
+            $distance["contact"] = $key->contact;
+            $distance["latitude"] = $key->latitude;
+            $distance["longitude"] = $key->longitude;
+
+            array_push($response["locations"], $distance);
+
+        }
+        
+        return response()->json($response);
+    }
+
     public function getAcomodation(Request $request)
     {
         $category = DB::table('category_locations')
         ->where('name', 'not like', 'Wisata')->get();
 
+        $response["acomodation"] = array();
+        $response["category"] = array();
+
         foreach ($category as $key) {
-            $id[] = $key->id;
-        }
+            $temp = DB::table('list_locations')
+            ->where('category_id', '=', $key->id)->get();
 
-        $acomodation = DB::table('list_locations')
-        ->where('category_id', '=', $id[0],
-                'or', '=', $id[1],
-                'or', '=', $id[2],
-                'or', '=', $id[3])->get();
+            foreach ($temp as $key2 ) {
 
-        $distance[] = "";
-        
-        foreach ($acomodation as $key ) {
-            if($request->userLat==0 && $request->userLong==0){
-                $distance[] = 0;    
-            }else {
-                $distance[] = ListLocationsController::getDistance(
-                              $request->get('userLat'), $key->latitude, 
-                              $request->get('userLong'), $key->longitude);
+                $distance["id"] = $key2->id;
+                $distance["name"] = $key2->name;
+                $distance["address"] = $key2->address;
+                $distance["description"] = $key2->description;
+                $distance["category_id"] = $key2->category_id;
+                $distance["image"] = $key2->image;
+                $distance["contact"] = $key2->contact;
+                $distance["latitude"] = $key2->latitude;
+                $distance["longitude"] = $key2->longitude;
+
+                $acomodation[] = $key2;
+                if(Auth::guard('users')->check()){
+                    if($request->userLat==0 && $request->userLong==0){
+                        $distance["distance"] = 0;
+                    }else {
+                        $distance["distance"] = ListLocationsController::getDistance(
+                                    $request->get('userLat'), $key2->latitude, 
+                                    $request->get('userLong'), $key2->longitude);
+                    }
+                }else {
+                    $distance["distance"] = 0;
+                }
+
+                array_push($response["acomodation"], $distance);
+
             }
-        }
-        
-        unset($distance[0]);
 
-        return response()->json([$category, $acomodation, $distance]);
+            array_push($response["category"], $key);
+
+        }
+
+        
+
+        return response()->json($response);
     }
 
     public function index(Request $request)
@@ -75,29 +128,64 @@ class ListLocationsController extends Controller
         $list_location = DB::table('list_locations')
         ->where('category_id', '=', $category->id)->get();
 
-        $galery = Galery::all();
+        
+
+        $response["locations"] = array();
+        
 
         foreach ($list_location as $key ) {
-            if($request->userLat==0 && $request->userLong==0){
-                $distance[] = 0;    
-            }else {
-                $distance[] = ListLocationsController::getDistance(
-                              $request->get('userLat'), $key->latitude, 
-                              $request->get('userLong'), $key->longitude);
+            
+            $distance["id"] = $key->id;
+            $distance["name"] = $key->name;
+            $distance["address"] = $key->address;
+            $distance["description"] = $key->description;
+            $distance["category_id"] = $key->category_id;
+            $distance["image"] = $key->image;
+            $distance["contact"] = $key->contact;
+            $distance["latitude"] = $key->latitude;
+            $distance["longitude"] = $key->longitude;
+            
+            if(Auth::guard('users')->check()){
+                if($request->userLat==0 && $request->userLong==0){
+                    
+                    $distance["distance"] = 0;    
+                }else {
+                    $distance["distance"] = ListLocationsController::getDistance(
+                                $request->get('userLat'), $key->latitude, 
+                                $request->get('userLong'), $key->longitude);
+                }
+            } else {
+                $distance["distance"] = 0;
             }
+
+
+            array_push($response["locations"], $distance);
+
+        }
+
+        $galery = Galery::all();
+        $response["galery"] = array();
+
+        foreach ($galery as $key) {
+            array_push($response["galery"], $key);
         }
         
-        return response()->json([$list_location, $galery, $distance]);
+        return response()->json($response);
     }
 
     public function search(Request $request)
 	{
-		$search = $request->search;
+        $search = $request->search;
+        $response["result"] = array();
  
     	$list_location = DB::table('list_locations')
-		->where('address','like',"%".$search."%")->get();
+        ->where('address','like',"%".$search."%")->get();
+        
+        foreach ($list_location as $key ) {
+            array_push($response["result"], $key);
+        }
  
-    	return response()->json([$list_location]);
+    	return response()->json($response);
  
 	}
 
@@ -141,9 +229,21 @@ class ListLocationsController extends Controller
     
     public function show($id)
     {
-        $list_location = ListLocations::find($id);
-        $currentGalery = DB::table('galery')->where('list_location_id', $list_location->id)->get();
-        return response()->json([$list_location, $currentGalery]);
+        $detail_location = ListLocations::find($id);
+        //$response["currentLocation"] = array();
+        //$response["currentGalery"] = array();
+
+        //foreach ($list_location as $key) {
+            //array_push($response["currentLocation"], $list_location);
+        //}
+
+        $currentGalery = DB::table('galery')->where('list_location_id', $detail_location->id)->get();
+        
+        // foreach ($currentGalery as $key) {
+        //     array_push($response["currentGalery"], $key);
+        // }
+
+        return response()->json(compact('detail_location', 'currentGalery'));
     }
 
     public function update(Request $request, $id)

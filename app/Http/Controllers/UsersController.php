@@ -24,7 +24,7 @@ class UsersController extends Controller
     
     public function me() {
         $credentials = JWTAuth::parseToken()->authenticate();
-        return response()->json($credentials);
+        return response()->json(compact('credentials'));
     }
 
     public function logout() {
@@ -55,7 +55,7 @@ class UsersController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
         ]);
 
         if($validator->fails()){
@@ -107,7 +107,7 @@ class UsersController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
         ]);
 
         if($validator->fails()){
@@ -120,6 +120,18 @@ class UsersController extends Controller
             $file->storeAs('public/users/', $filename);
         }else{
             $filename= 'N/A';
+        }
+
+        if($request->get('name')==NULL){
+            $password = $users->name;
+        } else{
+            $password = $request->get('password');
+        }
+
+        if($request->get('email')==NULL){
+            $password = $users->email;
+        } else{
+            $password = $request->get('password');
         }
 
         if($request->get('password')==NULL){
@@ -135,7 +147,7 @@ class UsersController extends Controller
             'image'=>$filename
         ]);
 
-        return response()->json($users);
+        return response()->json(compact('users'));
         
     }
 }

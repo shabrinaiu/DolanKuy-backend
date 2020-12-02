@@ -8,10 +8,45 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryLocationsController extends Controller
 {
-    public function index()
+
+
+    public function read()
     {
         $category = CategoryLocations::all();
-        return response()->json($category);
+
+        $response["category"] = array();
+        
+        foreach ($category as $key) {
+            array_push($response["category"], $key);
+        }
+
+        return response()->json(compact('category'));
+    }
+
+    public function index()
+    {
+        $category = DB::table('category_locations')
+        ->where('name', 'not like', 'Wisata')->get();
+
+        $response["category"] = array();
+        
+        foreach ($category as $key) {
+            array_push($response["category"], $key);
+        }
+
+        return response()->json($response);
+    }
+
+    public function search($name){
+        
+        if($name == 'wisata'){
+            return response()->json('tidakAda');
+        }else {
+            $search = CategoryLocations::where('name', 'like', "%{$name}%")->get();
+            return response()->json($search);
+        }
+
+        
     }
 
    
@@ -31,8 +66,10 @@ class CategoryLocationsController extends Controller
     public function show($id)
     {
         $category = CategoryLocations::find($id);
+
         $currentLocation = DB::table('list_locations')->where('category_id', $category->id)->get();
-        return response()->json([$currentLocation, $category]);
+        
+        return response()->json(compact('category', 'currentLocation'));
     }
 
     
