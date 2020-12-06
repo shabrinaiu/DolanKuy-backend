@@ -196,7 +196,7 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             //'tag' => 'required',
-            'image' => 'required|image|mimes:png,jpeg,jpg',
+            'image' => 'required',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',

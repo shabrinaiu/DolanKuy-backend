@@ -44,14 +44,14 @@ Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']
     Route::delete('/delete/{id}', [GaleryController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'locations',  'middleware' => ['jwt.verify','role.check']], function() {
+Route::group(['prefix' => 'location'/*,  'middleware' => ['jwt.verify','role.check']*/ ], function() {
     Route::get('/read', [ListLocationsController::class, 'read']);
     Route::post('/create', [ListLocationsController::class, 'store']);
     Route::post('/update/{id}', [ListLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [ListLocationsController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'category',  'middleware' => ['jwt.verify','role.check']], function() {
+Route::group(['prefix' => 'category'], function() {
     Route::get('/read', [CategoryLocationsController::class, 'index']);
     Route::post('/create', [CategoryLocationsController::class, 'store']);
     Route::put('/update/{id}', [CategoryLocationsController::class, 'update']);
