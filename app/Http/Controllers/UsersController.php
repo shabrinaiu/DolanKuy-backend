@@ -115,23 +115,25 @@ class UsersController extends Controller
         }
 
         if($request->hasFile('image')) {
+
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/users/', $filename);
+
         }else{
             $filename= 'N/A';
         }
 
         if($request->get('name')==NULL){
-            $password = $users->name;
+            $name = $users->name;
         } else{
-            $password = $request->get('password');
+            $name = $request->get('name');
         }
 
         if($request->get('email')==NULL){
-            $password = $users->email;
+            $email = $users->email;
         } else{
-            $password = $request->get('password');
+            $email = $request->get('email');
         }
 
         if($request->get('password')==NULL){
@@ -141,8 +143,8 @@ class UsersController extends Controller
         }
 
         $users->update([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
+            'name' => $name,
+            'email' => $email,
             'password' => Hash::make($password),
             'image'=>$filename
         ]);
