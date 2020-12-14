@@ -29,13 +29,12 @@ Route::post('register', [UsersController::class, 'register']);
 Route::post('login', [UsersController::class, 'login']);
 
 Route::get('/dashboard', [ListLocationsController::class, 'dashboard']);
+Route::get('/acomodation', [ListLocationsController::class, 'getAcomodation']);
+Route::get('/galery', [GaleryController::class, 'index']);
+
 Route::get('/locations', [ListLocationsController::class, 'index'])->name('user');
 Route::get('/locations/search', [ListLocationsController::class, 'search']);
 Route::get('/locations/{id}', [ListLocationsController::class, 'show']);
-Route::get('/category/{id}', [CategoryLocationsController::class, 'show']);
-Route::get('/category', [CategoryLocationsController::class, 'index']);
-Route::get('/acomodation', [ListLocationsController::class, 'getAcomodation']);
-
 
 Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']], function() {
     Route::get('/read', [GaleryController::class, 'index']);
@@ -44,15 +43,16 @@ Route::group(['prefix' => 'galery',  'middleware' => ['jwt.verify','role.check']
     Route::delete('/delete/{id}', [GaleryController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'locations',  'middleware' => ['jwt.verify','role.check']], function() {
+Route::group(['prefix' => 'location'/*,  'middleware' => ['jwt.verify','role.check']*/ ], function() {
     Route::get('/read', [ListLocationsController::class, 'read']);
     Route::post('/create', [ListLocationsController::class, 'store']);
     Route::post('/update/{id}', [ListLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [ListLocationsController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'category',  'middleware' => ['jwt.verify','role.check']], function() {
-    Route::get('/read', [CategoryLocationsController::class, 'index']);
+Route::group(['prefix' => 'category' /*,  'middleware' => ['jwt.verify','role.check']*/], function() {
+    Route::get('/{id}', [CategoryLocationsController::class, 'show']);
+    Route::get('/', [CategoryLocationsController::class, 'read']);
     Route::post('/create', [CategoryLocationsController::class, 'store']);
     Route::put('/update/{id}', [CategoryLocationsController::class, 'update']);
     Route::delete('/delete/{id}', [CategoryLocationsController::class, 'destroy']);

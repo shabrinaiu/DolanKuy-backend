@@ -47,27 +47,15 @@ class ListLocationsController extends Controller
     public function dashboard(Request $request)
     {
 
-        $list_location = ListLocations::all();
+        $category = DB::table('category_locations')
+        ->where('name', 'like', 'Wisata')->get()->first();
 
-        $response["locations"] = array();
+        $dashboard = DB::table('list_locations')
+        ->where('category_id', '=', $category->id)
+        ->orderBy('updated_at', 'desc')
+        ->get();
         
-        foreach ($list_location as $key ) {
-            
-            $distance["id"] = $key->id;
-            $distance["name"] = $key->name;
-            $distance["address"] = $key->address;
-            $distance["description"] = $key->description;
-            $distance["category_id"] = $key->category_id;
-            $distance["image"] = $key->image;
-            $distance["contact"] = $key->contact;
-            $distance["latitude"] = $key->latitude;
-            $distance["longitude"] = $key->longitude;
-
-            array_push($response["locations"], $distance);
-
-        }
-        
-        return response()->json($response);
+        return response()->json(compact('dashboard'));
     }
 
     public function getAcomodation(Request $request)
@@ -128,11 +116,8 @@ class ListLocationsController extends Controller
         $list_location = DB::table('list_locations')
         ->where('category_id', '=', $category->id)->get();
 
-        
-
         $response["locations"] = array();
         
-
         foreach ($list_location as $key ) {
             
             $distance["id"] = $key->id;
@@ -162,13 +147,6 @@ class ListLocationsController extends Controller
             array_push($response["locations"], $distance);
 
         }
-
-        $galery = Galery::all();
-        $response["galery"] = array();
-
-        foreach ($galery as $key) {
-            array_push($response["galery"], $key);
-        }
         
         return response()->json($response);
     }
@@ -176,16 +154,13 @@ class ListLocationsController extends Controller
     public function search(Request $request)
 	{
         $search = $request->search;
-        $response["result"] = array();
  
-    	$list_location = DB::table('list_locations')
-        ->where('address','like',"%".$search."%")->get();
+    	$search_result = DB::table('list_locations')
+        ->where('address','like','%'.$search.'%')
+        ->orWhere('name', 'like','%'.$search.'%')
+        ->get();
         
-        foreach ($list_location as $key ) {
-            array_push($response["result"], $key);
-        }
- 
-    	return response()->json($response);
+    	return response()->json(compact('search_result'));
  
 	}
 
@@ -196,7 +171,7 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             //'tag' => 'required',
-            'image' => 'required|image|mimes:png,jpeg,jpg',
+            'image' => 'required',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
@@ -230,19 +205,9 @@ class ListLocationsController extends Controller
     public function show($id)
     {
         $detail_location = ListLocations::find($id);
-        //$response["currentLocation"] = array();
-        //$response["currentGalery"] = array();
-
-        //foreach ($list_location as $key) {
-            //array_push($response["currentLocation"], $list_location);
-        //}
 
         $currentGalery = DB::table('galery')->where('list_location_id', $detail_location->id)->get();
         
-        // foreach ($currentGalery as $key) {
-        //     array_push($response["currentGalery"], $key);
-        // }
-
         return response()->json(compact('detail_location', 'currentGalery'));
     }
 
