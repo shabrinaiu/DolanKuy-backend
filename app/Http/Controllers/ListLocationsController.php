@@ -50,12 +50,12 @@ class ListLocationsController extends Controller
         $category = DB::table('category_locations')
         ->where('name', 'like', 'Wisata')->get()->first();
 
-        $dashboard = DB::table('list_locations')
+        $locations = DB::table('list_locations')
         ->where('category_id', '=', $category->id)
         ->orderBy('updated_at', 'desc')
         ->get();
         
-        return response()->json(compact('dashboard'));
+        return response()->json(compact('locations'));
     }
 
     public function getAcomodation(Request $request)
