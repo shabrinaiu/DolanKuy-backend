@@ -36,14 +36,6 @@ class ListLocationsController extends Controller
 
     }
 
-    public function read(Request $request)
-    {
-
-        $list_location = ListLocations::all();
-        
-        return response()->json(compact('list_location'));
-    }
-
     public function dashboard(Request $request)
     {
 
@@ -153,6 +145,9 @@ class ListLocationsController extends Controller
 
     public function search(Request $request)
 	{
+        if(empty($request->has('search'))){
+            return null;
+        }
         $search = $request->search;
  
     	$search_result = DB::table('list_locations')
@@ -171,7 +166,6 @@ class ListLocationsController extends Controller
             'address' => 'required',
             'description' => 'required',
             //'tag' => 'required',
-            'image' => 'required',
             'contact' => 'required',
             'category_id' => 'required',
             'latitude' => 'required',
@@ -179,11 +173,16 @@ class ListLocationsController extends Controller
         ]);
 
         if($request->hasFile('image')) {
+
+            $this->validate($request,[
+                'image' => 'required|image|mimes:png,jpeg,jpg'
+            ]);
+
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/dolankuy/', $filename);
         }else{
-            $filename= $request->image;
+            $filename= "N/A";
         }
 
             $list_location = ListLocations::create([
@@ -206,46 +205,132 @@ class ListLocationsController extends Controller
     {
         $detail_location = ListLocations::find($id);
 
+        if (empty($detail_location)){
+            return null;
+        }
+
         $currentGalery = DB::table('galery')->where('list_location_id', $detail_location->id)->get();
         
+        if (empty($currentGalery)){
+            return response()->json(compact('detail_location'));
+        }
+
         return response()->json(compact('detail_location', 'currentGalery'));
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'name' => 'required',
-            'address' => 'required',
-            'description' => 'required',
-            //'tag' => 'required',
-            'image' => 'required|image|mimes:png,jpeg,jpg',
-            'contact' => 'required',
-            'category_id' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required'
+            //'tag' => 'required',  
+            'category_id' => 'required'
         ]);
 
         $list_location = ListLocations::find($id);
 
+        if(empty($list_location)){
+            return null;
+        }
+
+        if($request->get('name')==NULL){
+            $name = $list_location->name;
+        } else{
+            $validator = Validator::make($request->all(), [
+                'name' => 'required'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            $name = $request->get('name');
+        }
+
+        if($request->get('address')==NULL){
+            $address = $list_location->address;
+        } else{
+            $validator = Validator::make($request->all(), [
+                'address' => 'required'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            $address = $request->get('address');
+        }
+
+        if($request->get('description')==NULL){
+            $description = $list_location->description;
+        } else{
+            $validator = Validator::make($request->all(), [
+                'description' => 'required'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            $description = $request->get('description');
+        }
+
+        if($request->get('contact')==NULL){
+            $contact = $list_location->contact;
+        } else{
+            $validator = Validator::make($request->all(), [
+                'contact' => 'required'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            $contact = $request->get('contact');
+        }
+
+        if($request->get('latitude')==NULL){
+            $latitude = $list_location->latitude;
+        } else{
+            $validator = Validator::make($request->all(), [
+                'latitude' => 'required'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            $latitude = $request->get('latitude');
+        }
+
+        if($request->get('longitude')==NULL){
+            $longitude = $list_location->longitude;
+        } else{
+            $validator = Validator::make($request->all(), [
+                'longitude' => 'required'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            $longitude = $request->get('longitude');
+        }
+
         if($request->hasFile('image')) {
+            $this->validate($request,[
+                'image' => 'required|image|mimes:png,jpeg,jpg'
+            ]);
             Storage::delete('/public/dolankuy/' . $list_location->image);
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/dolankuy/', $filename);
         }else{
-            $filename =$request->image;
+            $filename = $list_location->image;
         }
          
         $list_location->update([ 
-            'name' => $request->name,
-            'address' => $request->address,
+            'name' => $name,
+            'address' => $address,
             'image' => $filename,
             'category_id' => $request->category_id,
-            'description' => $request->description,
+            'description' => $description,
             //'tag' => $request->tag,
-            'contact' => $request->contact,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude
+            'contact' => $contact,
+            'latitude' => $latitude,
+            'longitude' => $longitude
         ]);
         
         return response()->json($list_location);
@@ -255,7 +340,15 @@ class ListLocationsController extends Controller
     public function destroy(Request $request, $id)
     {
         $list_location = ListLocations::find($id);
+        if(empty($list_location)){
+            return null;
+        }
         $currentGalery = DB::table('galery')->where('list_location_id', $list_location->id)->get();
+        
+        if(empty($currentGalery)){
+            return null;
+        }
+        
         if($request->hasFile('image')) {
             foreach ($currentGalery as $key => $value) {
                 Storage::delete('/public/dolankuy/' . $value->filename);
