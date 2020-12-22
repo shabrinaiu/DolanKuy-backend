@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+Use Crypt;
 
 class UsersController extends Controller
 {
@@ -28,11 +29,32 @@ class UsersController extends Controller
     }
 
     public function logout() {
+
+        try {
+
+            if (! $users = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['status'=>'user_not_found'], 404);
+            }
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+            return response()->json(['status'=>'token_expired'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+            return response()->json(['status'=>'token_invalid'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+            return response()->json(['status'=>'token_absent'], $e->getStatusCode());
+
+        }
+
         if (Auth::guard('users')->check()){
             auth()->guard('users')->logout();
-            return response()->json(['message' => 'Successfully loged out']);
+            return response()->json(['status' => 'Successfully logged out']);
         }
-        return response()->json(['message' => 'Failed loged out']);
+        return response()->json(['status' => 'Failed logged out']);
     }
 
     public function login(Request $request)
@@ -41,13 +63,14 @@ class UsersController extends Controller
 
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 400);
+                return response()->json(['status' => 'invalid_credentials'], 400);
             }
         } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return response()->json(['status' => 'could_not_create_token'], 500);
         }
 
-        return response()->json(compact('token'));
+        $status = "Login is Success";
+        return response()->json(compact('token', 'status'));
     }
 
     public function register(Request $request)
@@ -59,7 +82,7 @@ class UsersController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json(['status' => $validator->errors()->toJson()], 400);
         }
 
         $users = Users::create([
@@ -71,8 +94,9 @@ class UsersController extends Controller
         ]);
 
         $token = JWTAuth::fromUser($users);
+        $status = "register is success";
 
-        return response()->json(compact('users','token'),201);
+        return response()->json(compact('users','token', 'status'),201);
     }
 
     public function getAuthenticatedUser()
@@ -80,44 +104,68 @@ class UsersController extends Controller
         try {
 
             if (! $users = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
+                return response()->json(['status'=>'user_not_found'], 404);
             }
 
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 
-            return response()->json(['token_expired'], $e->getStatusCode());
+            return response()->json(['status'=>'token_expired'], $e->getStatusCode());
 
         } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
 
-            return response()->json(['token_invalid'], $e->getStatusCode());
+            return response()->json(['status'=>'token_invalid'], $e->getStatusCode());
 
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
 
-            return response()->json(['token_absent'], $e->getStatusCode());
+            return response()->json(['status'=>'token_absent'], $e->getStatusCode());
 
         }
 
-        return response()->json(compact('users'));
+        $status = "Token is Valid";
+
+        return response()->json(compact(['users', 'status']));
     }
 
     public function update(Request $request) {
 
-        $users = JWTAuth::parseToken()->authenticate();
-        
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|',
-            'password' => 'required|string|min:6',
-        ]);
+        try {
 
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            if (! $users = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['status'=>'user_not_found'], 404);
+            }
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+            return response()->json(['status'=>'token_expired'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+            return response()->json(['status'=>'token_invalid'], $e->getStatusCode());
+
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+            return response()->json(['status'=>'token_absent'], $e->getStatusCode());
+
         }
 
+        $users = JWTAuth::parseToken()->authenticate();
+        
+
         if($request->hasFile('image')) {
+            $validator = Validator::make($request->all(), [
+                'image'=>'required|image|mimes:png,jpeg,jpg',
+                //'password' => 'required|string|min:6'
+
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
 
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
+            
+            Storage::delete('/public/users/' . $users->image);
             $file->storeAs('public/users/', $filename);
 
         }else{
@@ -127,18 +175,50 @@ class UsersController extends Controller
         if($request->get('name')==NULL){
             $name = $users->name;
         } else{
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
             $name = $request->get('name');
         }
 
         if($request->get('email')==NULL){
             $email = $users->email;
         } else{
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|string|email|max:255|unique:users'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
             $email = $request->get('email');
         }
 
         if($request->get('password')==NULL){
             $password = $users->password;
+            $users->update([
+                'name' => $name,
+                'email' => $email,
+                'password' => $password,
+                'image'=>$filename
+            ]);
+    
+            $status = "Token is Valid";
+    
+            return response()->json(compact(['users', 'status']));
         } else{
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string|min:6'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            
             $password = $request->get('password');
         }
 
@@ -149,7 +229,9 @@ class UsersController extends Controller
             'image'=>$filename
         ]);
 
-        return response()->json(compact('users'));
+        $status = "Token is Valid";
+
+        return response()->json(compact(['users', 'status']));
         
     }
 }
