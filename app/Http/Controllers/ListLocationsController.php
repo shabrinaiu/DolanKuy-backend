@@ -46,8 +46,13 @@ class ListLocationsController extends Controller
         ->where('category_id', '=', $category->id)
         ->orderBy('updated_at', 'desc')
         ->get();
+
+        $galery = DB::table('galery')
+        ->orderBy('updated_at', 'desc')
+        ->take(5)
+        ->get();
         
-        return response()->json(compact('locations'));
+        return response()->json(compact('locations', 'galery'));
     }
 
     public function getAcomodation(Request $request)

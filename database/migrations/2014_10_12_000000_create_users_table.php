@@ -24,6 +24,67 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'zul fauzi',
+                'email' => 'zulfauzi@gmail.com',
+                'password' => Hash::make('password123'),
+                'image' => 'N/A',
+                'role' => 'admin'
+            )
+        );
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'enterprise',
+                'email' => 'enterprise@gmail.com',
+                'password' => Hash::make('password123'),
+                'image' => 'N/A',
+                'role' => 'admin'
+            )
+        );
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'gilangtaufiq',
+                'email' => 'gilang@gmail.com',
+                'password' => Hash::make('password123'),
+                'image' => 'N/A',
+                'role' => 'admin'
+            )
+        );
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'gedekresna',
+                'email' => 'kresna@gmail.com',
+                'password' => Hash::make('password123'),
+                'image' => 'N/A',
+                'role' => 'admin'
+            )
+        );
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'shabrina',
+                'email' => 'shabrina@gmail.com',
+                'password' => Hash::make('password123'),
+                'image' => 'N/A',
+                'role' => 'admin'
+            )
+        );
+
+        DB::table('users')->insert(
+            array(
+                'name' => 'belindaanindya',
+                'email' => 'belinda@gmail.com',
+                'password' => Hash::make('password123'),
+                'image' => 'N/A',
+                'role' => 'admin'
+            )
+        );
+
     }
 
     /**
