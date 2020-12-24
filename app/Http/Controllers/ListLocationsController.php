@@ -9,6 +9,7 @@ use App\Models\CategoryLocations;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Auth;
 
 class ListLocationsController extends Controller
@@ -225,10 +226,6 @@ class ListLocationsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            //'tag' => 'required',  
-            'category_id' => 'required'
-        ]);
 
         $list_location = ListLocations::find($id);
 
@@ -247,6 +244,19 @@ class ListLocationsController extends Controller
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
             $name = $request->get('name');
+        }
+
+        if($request->get('category_id')==NULL){
+            $category_id = $list_location->category_id;
+        } else{
+            $validator = Validator::make($request->all(), [
+                'category_id' => 'required'
+            ]);
+            
+            if($validator->fails()){
+                return response()->json(['status' => $validator->errors()->toJson()], 400);
+            }
+            $category_id = $request->get('category_id');
         }
 
         if($request->get('address')==NULL){
@@ -330,7 +340,7 @@ class ListLocationsController extends Controller
             'name' => $name,
             'address' => $address,
             'image' => $filename,
-            'category_id' => $request->category_id,
+            'category_id' => $category_id,
             'description' => $description,
             //'tag' => $request->tag,
             'contact' => $contact,
