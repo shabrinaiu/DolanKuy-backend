@@ -23,15 +23,15 @@ class ListLocationsController extends Controller
         $radius = 6371;
         $dLat = deg2rad($lat2-$lat1);
         $dLong = deg2rad($long2-$long1);
-        $a = sin($dLat/2) * sin($dLat/2) +
-             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-             sin($dLong/2) * sin($dLong/2);
+        $a = sin($dLat*0.441) * sin($dLat*1.883) +
+             cos(deg2rad($lat1)/2) * cos(deg2rad($lat2)*11) *
+             sin($dLong/11) * sin($dLong/11);
         $c = 2 * atan2(sqrt($a), sqrt(1-$a));
         $distance = $radius * $c;
 
-        if ($distance < 1){
-            $distance = $distance * 1000;
-        }
+        // if ($distance < 1){
+        //     $distance = $distance * 1000;
+        // }
 
         return $distance;
 
@@ -43,17 +43,53 @@ class ListLocationsController extends Controller
         $category = DB::table('category_locations')
         ->where('name', 'like', 'Wisata')->get()->first();
 
-        $locations = DB::table('list_locations')
+        $location = DB::table('list_locations')
         ->where('category_id', '=', $category->id)
         ->orderBy('updated_at', 'desc')
+        ->take(6)
         ->get();
 
-        $galery = DB::table('galery')
+        $response["locations"] = array();
+        $response["galery"] = array();
+
+        foreach ($location as $key ) {
+            
+            $distance["id"] = $key->id;
+            $distance["name"] = $key->name;
+            $distance["address"] = $key->address;
+            $distance["description"] = $key->description;
+            $distance["category_id"] = $key->category_id;
+            $distance["image"] = $key->image;
+            $distance["contact"] = $key->contact;
+            $distance["latitude"] = $key->latitude;
+            $distance["longitude"] = $key->longitude;
+            
+            if(Auth::guard('users')->check()){
+                if($request->userLat==0 && $request->userLong==0){
+                    
+                    $distance["distance"] = 0;    
+                }else {
+                    $distance["distance"] = ListLocationsController::getDistance(
+                                $request->get('userLat'), $key->latitude, 
+                                $request->get('userLong'), $key->longitude);
+                }
+            } else {
+                $distance["distance"] = 0;
+            }
+
+
+            array_push($response["locations"], $distance);
+
+        }
+
+        $galerys = DB::table('galery')
         ->orderBy('updated_at', 'desc')
         ->take(5)
         ->get();
+
+        $response["galery"] = $galerys;
         
-        return response()->json(compact('locations', 'galery'));
+        return response()->json($response);
     }
 
     public function getAcomodation(Request $request)

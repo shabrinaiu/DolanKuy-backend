@@ -212,7 +212,7 @@ class RelasiListLocationTable extends Migration
 
                 'image' => 'N/A',
                 'contact' => '+62318537413',
-                'latitude' => '7.3560019',
+                'latitude' => '-7.3560019',
                 'longitude' => '112.7471352'
             )
         );
