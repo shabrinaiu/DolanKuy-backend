@@ -18,6 +18,37 @@ class CreateCategoryLocationsTable extends Migration
             $table->string('name', 255);
             $table->timestamps();
         });
+
+        DB::table('category_locations')->insert(
+            array(
+                'name' => 'Wisata',
+            )
+        );
+
+        DB::table('category_locations')->insert(
+            array(
+                'name' => 'Kuliner',
+            )
+        );
+
+        DB::table('category_locations')->insert(
+            array(
+                'name' => 'Tempat Ibadah',
+            )
+        );
+
+        DB::table('category_locations')->insert(
+            array(
+                'name' => 'Market',
+            )
+        );
+
+        DB::table('category_locations')->insert(
+            array(
+                'name' => 'SPBU',
+            )
+        );
+
     }
 
     /**

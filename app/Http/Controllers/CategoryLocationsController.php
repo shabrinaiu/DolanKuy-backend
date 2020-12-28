@@ -71,15 +71,15 @@ class CategoryLocationsController extends Controller
         $radius = 6371;
         $dLat = deg2rad($lat2-$lat1);
         $dLong = deg2rad($long2-$long1);
-        $a = sin($dLat/2) * sin($dLat/2) +
-             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-             sin($dLong/2) * sin($dLong/2);
+        $a = sin($dLat*0.441) * sin($dLat*1.883) +
+             cos(deg2rad($lat1)*11) * cos(deg2rad($lat2)*11) *
+             sin($dLong/11) * sin($dLong/11);
         $c = 2 * atan2(sqrt($a), sqrt(1-$a));
         $distance = $radius * $c;
 
-        if ($distance < 1){
-            $distance = $distance * 1000;
-        }
+        // if ($distance < 1){
+        //     $distance = $distance * 1000;
+        // }
 
         return $distance;
 
@@ -119,7 +119,7 @@ class CategoryLocationsController extends Controller
                             if($request->userLat==0 && $request->userLong==0){
                                 $distance["distance"] = 0;
                             }else {
-                                $distance["distance"] = ListLocationsController::getDistance(
+                                $distance["distance"] = CategoryLocationsController::getDistance(
                                             $request->get('userLat'), $key2->latitude, 
                                             $request->get('userLong'), $key2->longitude);
                             }
