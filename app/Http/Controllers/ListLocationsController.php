@@ -53,7 +53,7 @@ class ListLocationsController extends Controller
         $response["galery"] = array();
 
         foreach ($location as $key ) {
-            
+
             $distance["id"] = $key->id;
             $distance["name"] = $key->name;
             $distance["address"] = $key->address;
@@ -63,14 +63,14 @@ class ListLocationsController extends Controller
             $distance["contact"] = $key->contact;
             $distance["latitude"] = $key->latitude;
             $distance["longitude"] = $key->longitude;
-            
+
             if(Auth::guard('users')->check()){
                 if($request->userLat==0 && $request->userLong==0){
-                    
-                    $distance["distance"] = 0;    
+
+                    $distance["distance"] = 0;
                 }else {
                     $distance["distance"] = ListLocationsController::getDistance(
-                                $request->get('userLat'), $key->latitude, 
+                                $request->get('userLat'), $key->latitude,
                                 $request->get('userLong'), $key->longitude);
                 }
             } else {
@@ -87,13 +87,9 @@ class ListLocationsController extends Controller
         ->take(5)
         ->get();
 
-<<<<<<< HEAD
-        return response()->json(compact('locations'));
-=======
         $response["galery"] = $galerys;
-        
+
         return response()->json($response);
->>>>>>> 265f10109e9481f03ea862715ca7309458f1c254
     }
 
     public function getAcomodation(Request $request)
@@ -266,13 +262,6 @@ class ListLocationsController extends Controller
 
     public function update(Request $request, $id)
     {
-<<<<<<< HEAD
-        $this->validate($request,[
-            //'tag' => 'required',
-            'category_id' => 'required'
-        ]);
-=======
->>>>>>> 265f10109e9481f03ea862715ca7309458f1c254
 
         $list_location = ListLocations::find($id);
 
@@ -299,7 +288,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'category_id' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
