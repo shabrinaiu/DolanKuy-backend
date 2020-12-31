@@ -22,7 +22,7 @@ class UsersController extends Controller
         }
         return response()->json($auth);
     }
-    
+
     public function me() {
         $credentials = JWTAuth::parseToken()->authenticate();
         return response()->json(compact('credentials'));
@@ -149,7 +149,7 @@ class UsersController extends Controller
         }
 
         $users = JWTAuth::parseToken()->authenticate();
-        
+
 
         if($request->hasFile('image')) {
             $validator = Validator::make($request->all(), [
@@ -157,14 +157,14 @@ class UsersController extends Controller
                 //'password' => 'required|string|min:6'
 
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
 
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            
+
             Storage::delete('/public/users/' . $users->image);
             $file->storeAs('public/users/', $filename);
 
@@ -178,7 +178,7 @@ class UsersController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -191,7 +191,7 @@ class UsersController extends Controller
             $validator = Validator::make($request->all(), [
                 'email' => 'required|string|email|max:255|unique:users'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -206,19 +206,19 @@ class UsersController extends Controller
                 'password' => $password,
                 'image'=>$filename
             ]);
-    
+
             $status = "Token is Valid";
-    
+
             return response()->json(compact(['users', 'status']));
         } else{
             $validator = Validator::make($request->all(), [
                 'password' => 'required|string|min:6'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
-            
+
             $password = $request->get('password');
         }
 
@@ -232,6 +232,6 @@ class UsersController extends Controller
         $status = "Token is Valid";
 
         return response()->json(compact(['users', 'status']));
-        
+
     }
 }

@@ -14,7 +14,7 @@ use Auth;
 
 class ListLocationsController extends Controller
 {
-    
+
     public function deg2rad($deg) {
         return $deg * (pi/180);
     }
@@ -53,7 +53,7 @@ class ListLocationsController extends Controller
         $response["galery"] = array();
 
         foreach ($location as $key ) {
-            
+
             $distance["id"] = $key->id;
             $distance["name"] = $key->name;
             $distance["address"] = $key->address;
@@ -63,14 +63,14 @@ class ListLocationsController extends Controller
             $distance["contact"] = $key->contact;
             $distance["latitude"] = $key->latitude;
             $distance["longitude"] = $key->longitude;
-            
+
             if(Auth::guard('users')->check()){
                 if($request->userLat==0 && $request->userLong==0){
-                    
-                    $distance["distance"] = 0;    
+
+                    $distance["distance"] = 0;
                 }else {
                     $distance["distance"] = ListLocationsController::getDistance(
-                                $request->get('userLat'), $key->latitude, 
+                                $request->get('userLat'), $key->latitude,
                                 $request->get('userLong'), $key->longitude);
                 }
             } else {
@@ -88,7 +88,7 @@ class ListLocationsController extends Controller
         ->get();
 
         $response["galery"] = $galerys;
-        
+
         return response()->json($response);
     }
 
@@ -122,7 +122,7 @@ class ListLocationsController extends Controller
                         $distance["distance"] = 0;
                     }else {
                         $distance["distance"] = ListLocationsController::getDistance(
-                                    $request->get('userLat'), $key2->latitude, 
+                                    $request->get('userLat'), $key2->latitude,
                                     $request->get('userLong'), $key2->longitude);
                     }
                 }else {
@@ -137,7 +137,7 @@ class ListLocationsController extends Controller
 
         }
 
-        
+
 
         return response()->json($response);
     }
@@ -151,9 +151,9 @@ class ListLocationsController extends Controller
         ->where('category_id', '=', $category->id)->get();
 
         $response["locations"] = array();
-        
+
         foreach ($list_location as $key ) {
-            
+
             $distance["id"] = $key->id;
             $distance["name"] = $key->name;
             $distance["address"] = $key->address;
@@ -163,14 +163,14 @@ class ListLocationsController extends Controller
             $distance["contact"] = $key->contact;
             $distance["latitude"] = $key->latitude;
             $distance["longitude"] = $key->longitude;
-            
+
             if(Auth::guard('users')->check()){
                 if($request->userLat==0 && $request->userLong==0){
-                    
-                    $distance["distance"] = 0;    
+
+                    $distance["distance"] = 0;
                 }else {
                     $distance["distance"] = ListLocationsController::getDistance(
-                                $request->get('userLat'), $key->latitude, 
+                                $request->get('userLat'), $key->latitude,
                                 $request->get('userLong'), $key->longitude);
                 }
             } else {
@@ -181,7 +181,7 @@ class ListLocationsController extends Controller
             array_push($response["locations"], $distance);
 
         }
-        
+
         return response()->json($response);
     }
 
@@ -191,14 +191,14 @@ class ListLocationsController extends Controller
             return null;
         }
         $search = $request->search;
- 
+
     	$search_result = DB::table('list_locations')
         ->where('address','like','%'.$search.'%')
         ->orWhere('name', 'like','%'.$search.'%')
         ->get();
-        
+
     	return response()->json(compact('search_result'));
- 
+
 	}
 
     public function store(Request $request)
@@ -238,11 +238,11 @@ class ListLocationsController extends Controller
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
             ]);
-        
+
         return response()->json($list_location);
     }
 
-    
+
     public function show($id)
     {
         $detail_location = ListLocations::find($id);
@@ -252,7 +252,7 @@ class ListLocationsController extends Controller
         }
 
         $currentGalery = DB::table('galery')->where('list_location_id', $detail_location->id)->get();
-        
+
         if (empty($currentGalery)){
             return response()->json(compact('detail_location'));
         }
@@ -275,7 +275,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -288,7 +288,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'category_id' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -301,7 +301,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'address' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -314,7 +314,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'description' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -327,7 +327,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'contact' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -340,7 +340,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'latitude' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -353,7 +353,7 @@ class ListLocationsController extends Controller
             $validator = Validator::make($request->all(), [
                 'longitude' => 'required'
             ]);
-            
+
             if($validator->fails()){
                 return response()->json(['status' => $validator->errors()->toJson()], 400);
             }
@@ -371,8 +371,8 @@ class ListLocationsController extends Controller
         }else{
             $filename = $list_location->image;
         }
-         
-        $list_location->update([ 
+
+        $list_location->update([
             'name' => $name,
             'address' => $address,
             'image' => $filename,
@@ -383,7 +383,7 @@ class ListLocationsController extends Controller
             'latitude' => $latitude,
             'longitude' => $longitude
         ]);
-        
+
         return response()->json($list_location);
 
     }
@@ -395,11 +395,11 @@ class ListLocationsController extends Controller
             return null;
         }
         $currentGalery = DB::table('galery')->where('list_location_id', $list_location->id)->get();
-        
+
         if(empty($currentGalery)){
             return null;
         }
-        
+
         if($request->hasFile('image')) {
             foreach ($currentGalery as $key => $value) {
                 Storage::delete('/public/dolankuy/' . $value->filename);
