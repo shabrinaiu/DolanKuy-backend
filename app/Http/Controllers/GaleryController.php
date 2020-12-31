@@ -28,7 +28,7 @@ class GaleryController extends Controller
             ]);
             $file = $request->file('filename');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/dolankuy/', $filename);
+            $file->storeAs('dolankuy/', $filename);
         }else{
             $filename= $request->filename;
         }
@@ -74,8 +74,8 @@ class GaleryController extends Controller
                 
                 $file = $request->file('filename');
                 $filename = time() . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('public/dolankuy/', $filename);  
-                Storage::delete('/public/dolankuy/' . $galery->filename);
+                $file->storeAs('dolankuy/', $filename);  
+                Storage::delete('dolankuy/' . $galery->filename);
             }else{
                 $filename=$request->filename;
             }
@@ -97,7 +97,7 @@ class GaleryController extends Controller
         if(empty($galery)){
 
         }else {
-            Storage::delete('/public/dolankuy/' . $galery->filename);
+            Storage::delete('dolankuy/' . $galery->filename);
             $galery->delete();
             return response()->json($galery);
         }

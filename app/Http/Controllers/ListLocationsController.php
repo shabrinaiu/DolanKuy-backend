@@ -147,8 +147,16 @@ class ListLocationsController extends Controller
         $category = DB::table('category_locations')
         ->where('name', 'like', 'Wisata')->get()->first();
 
+        if (empty($category)){
+            return null;
+        }
+
         $list_location = DB::table('list_locations')
         ->where('category_id', '=', $category->id)->get();
+
+        if (empty($list_location)){
+            return null;
+        }
 
         $response["locations"] = array();
 
@@ -197,6 +205,10 @@ class ListLocationsController extends Controller
         ->orWhere('name', 'like','%'.$search.'%')
         ->get();
 
+        if(empty($search_result)){
+            return null;
+        }
+
     	return response()->json(compact('search_result'));
 
 	}
@@ -222,7 +234,7 @@ class ListLocationsController extends Controller
 
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/dolankuy/', $filename);
+            $file->storeAs('dolankuy/', $filename);
         }else{
             $filename= "N/A";
         }
@@ -364,10 +376,10 @@ class ListLocationsController extends Controller
             $this->validate($request,[
                 'image' => 'required|image|mimes:png,jpeg,jpg'
             ]);
-            Storage::delete('/public/dolankuy/' . $list_location->image);
+            Storage::delete('dolankuy/' . $list_location->image);
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/dolankuy/', $filename);
+            $file->storeAs('dolankuy/', $filename);
         }else{
             $filename = $list_location->image;
         }
@@ -402,7 +414,7 @@ class ListLocationsController extends Controller
 
         if($request->hasFile('image')) {
             foreach ($currentGalery as $key => $value) {
-                Storage::delete('/public/dolankuy/' . $value->filename);
+                Storage::delete('dolankuy/' . $value->filename);
             }
         }
         $list_location->delete();
