@@ -165,8 +165,8 @@ class UsersController extends Controller
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
 
-            Storage::delete('/public/users/' . $users->image);
-            $file->storeAs('public/users/', $filename);
+            Storage::delete('users/' . $users->image);
+            $file->storeAs('users/', $filename);
 
         }else{
             $filename= 'N/A';

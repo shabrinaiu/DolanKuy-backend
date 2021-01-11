@@ -198,14 +198,14 @@ class CategoryLocationsController extends Controller
                 }else {
                     foreach ($currentLocation as $key1 => $value1) {
                         
-                        Storage::delete('/public/dolankuy/' . $value1->image);
+                        Storage::delete('dolankuy/' . $value1->image);
                         $currentGalery = DB::table('galery')->where('list_location_id', $value1->id)->get();
                         
                         if(empty($currentGalery)){
 
                         }else{
                             foreach ($currentGalery as $key2 => $value2) {
-                                Storage::delete('/public/dolankuy/' . $value2->filename);
+                                Storage::delete('dolankuy/' . $value2->filename);
                             }
                         }
                         
