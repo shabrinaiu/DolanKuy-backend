@@ -15,13 +15,13 @@ class GaleryController extends Controller
         $galery = Galery::all();
         return response()->json(compact('galery'));
     }
-   
+
     public function store(Request $request)
     {
         $request->validate([
             'list_location_id' => 'required'
         ]);
-        
+
         if($request->hasFile('filename')) {
             $request->validate([
                 'filename' => 'required|image|mimes:png,jpeg,jpg'
@@ -37,7 +37,7 @@ class GaleryController extends Controller
             'list_location_id' => $request->list_location_id,
             'filename' => $filename,
         ]);
-        
+
         return response()->json($galery);
     }
 
@@ -49,10 +49,10 @@ class GaleryController extends Controller
         } else {
             return response()->json(compact('currentGalery'));
         }
-        
+
     }
 
-    
+
     public function update(Request $request, $id)
     {
         $galery = Galery::find($id);
@@ -60,21 +60,20 @@ class GaleryController extends Controller
         if(empty($galery)){
 
         } else {
-        
+
             $request->validate([
                 'list_location_id' => 'required'
             ]);
-
 
             if($request->hasFile('filename')) {
 
                 $request->validate([
                     'filename' => 'required|image|mimes:png,jpeg,jpg'
                 ]);
-                
+
                 $file = $request->file('filename');
                 $filename = time() . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('dolankuy/', $filename);  
+                $file->storeAs('dolankuy/', $filename);
                 Storage::delete('dolankuy/' . $galery->filename);
             }else{
                 $filename=$request->filename;
@@ -90,7 +89,6 @@ class GaleryController extends Controller
 
     }
 
-    
     public function destroy(Request $request, $id)
     {
         $galery = Galery::find($id);
@@ -101,6 +99,5 @@ class GaleryController extends Controller
             $galery->delete();
             return response()->json($galery);
         }
-        
     }
 }
